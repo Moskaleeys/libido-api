@@ -14,8 +14,50 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.conf.urls import include, url
 from django.urls import path
 
+import libido_auths.urls as auth_urls
+import libido_users.urls as users_urls
+
+from drf_yasg import openapi
+from drf_yasg.views import get_schema_view
+
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title="Libido Service API",
+        default_version="v1",
+        description="v1",
+        terms_of_service="Libido",
+        contact=openapi.Contact(email="help@libido.co.kr"),
+        license=openapi.License(name="BSD License"),
+    ),
+    public=True,
+)
+
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path("libido_admin/", admin.site.urls),
+    url(r"^v1/", include(auth_urls)),
+    url(r"^v1/", include(users_urls)),
+    url(r"^v9999/auth/", include("rest_framework_social_oauth2.urls")),  # dummpy auth
+]
+
+
+urlpatterns += [
+    url(
+        r"^libido_v1_swagger(?P<format>\.json|\.yaml)$",
+        schema_view.without_ui(cache_timeout=0),
+        name="schema-json",
+    ),
+    url(
+        r"^libido_v1_swagger/$",
+        schema_view.with_ui("swagger", cache_timeout=0),
+        name="schema-swagger-ui",
+    ),
+    url(
+        r"^libido_v1_redocs/$",
+        schema_view.with_ui("redoc", cache_timeout=0),
+        name="schema-redoc",
+    ),
 ]
