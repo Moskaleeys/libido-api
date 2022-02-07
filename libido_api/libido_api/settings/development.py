@@ -9,19 +9,19 @@ DEBUG = True
 SERVICE = "development"
 ALLOWED_HOSTS = ["*"]
 
-WSGI_APPLICATION = "offerflow_api.wsgi.development.application"
+# WSGI_APPLICATION = "libido_api.wsgi.development.application"
 
 SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 
 DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 
-AWS_ACCESS_KEY_ID = "AKIAXD2JPQT3DQFI7X"
-AWS_SECRET_ACCESS_KEY = "lJSD6IQB+fBHOFlC6jr1ynBhpxkjMP83qoAe396"
+AWS_ACCESS_KEY_ID = "AKIATWD4P5YETFG735QQ"
+AWS_SECRET_ACCESS_KEY = "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"
 
-AWS_STORAGE_BUCKET_NAME = "offerflow-dev"
+AWS_STORAGE_BUCKET_NAME = "libido-dev"
 
-AWS_DEFAULT_ACL = "public-read"
+# AWS_DEFAULT_ACL = "public-read"
 
 AWS_S3_OBJECT_PARAMETERS = {
     "CacheControl": "max-age=86400",
