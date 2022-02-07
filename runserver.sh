@@ -1,7 +1,7 @@
 export DATABASE_ENGINE=django.db.backends.mysql \
     DATABASE_HOST=libido-backend-test.cubzbc1hlyxy.ap-northeast-2.rds.amazonaws.com \
     DATABASE_PORT=3306 \
-    DATABASE_NAME=libido \
+    DATABASE_NAME=libido-v2 \
     DATABASE_USER=root \
     DATABASE_PASSWORD=MoskaStudio~!1 \
     DJANGO_SECRET_KEY='django-insecure-pr*ox7h!2j8ql1*@)kt34a8ddalhlvq-bqw73ak@56gieyyj0&' \
@@ -20,6 +20,4 @@ export DATABASE_ENGINE=django.db.backends.mysql \
 
 
 # for development
-# python3 manage.py shell_plus --settings=config.settings.development
 cd libido_api && python3 manage.py runserver 8000 --settings=libido_api.settings.development
-# python3 manage.py createsuperuser --settings=config.settings.development
