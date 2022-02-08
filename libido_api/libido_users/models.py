@@ -58,6 +58,9 @@ def upload_thumb(instance, filename):
 
 
 class User(AbstractUser, PrintableModel):
+    first_name = None
+    last_name = None
+
     id = models.CharField(
         db_index=True,
         max_length=40,
@@ -69,12 +72,6 @@ class User(AbstractUser, PrintableModel):
         default=True,
         verbose_name="활성화 상태",
         help_text="액티브된 유저 유무 확인 is_active 가 false로 된경우 accesstoken을 받아올 수 없다.",
-    )
-
-    is_recruiter = models.BooleanField(
-        default=False,
-        verbose_name="리쿠르터 여부",
-        help_text="리쿠르터 여부",
     )
 
     nickname = models.CharField(
