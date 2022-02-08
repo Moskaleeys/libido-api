@@ -1,5 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.core.cache import cache
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from django_filters.rest_framework import DjangoFilterBackend
 from oauth2_provider.contrib.rest_framework import (
     TokenHasReadWriteScope,
@@ -70,6 +72,17 @@ class UserViewSet(DeleteMixin, BaseViewSet):
         except KeyError:
             return UserSerializer
 
+    @swagger_auto_schema(
+        method="post",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                "username": openapi.Schema(
+                    type=openapi.TYPE_STRING, description="유저네임(이메일주소)"
+                ),
+            },
+        ),
+    )
     @action(
         methods=["POST"], detail=False, url_path="check_username", permission_classes=[]
     )
@@ -78,6 +91,15 @@ class UserViewSet(DeleteMixin, BaseViewSet):
         is_duplicate = User.check_username(username=username)
         return Response({"is_duplicate": is_duplicate}, status=status.HTTP_200_OK)
 
+    @swagger_auto_schema(
+        method="post",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                "mobile": openapi.Schema(type=openapi.TYPE_STRING, description="핸드폰번호"),
+            },
+        ),
+    )
     @action(
         methods=["POST"],
         detail=False,
@@ -103,6 +125,13 @@ class UserViewSet(DeleteMixin, BaseViewSet):
         serializer = self.get_serializer(instance=request.user)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    @swagger_auto_schema(
+        method="post",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={},
+        ),
+    )
     @action(
         methods=["POST"],
         detail=False,
