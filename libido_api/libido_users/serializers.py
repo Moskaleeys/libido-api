@@ -22,10 +22,10 @@ class UserSerializer(serializers.ModelSerializer):
 
 class RegisterSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
-    username = serializers.CharField()
-    password = serializers.CharField()
-    mobile = serializers.CharField()
-    nickname = serializers.CharField()
+    username = serializers.CharField(label="이메일(유저네임)")
+    password = serializers.CharField(label="비밀번호")
+    mobile = serializers.CharField(label="핸드폰번호")
+    nickname = serializers.CharField(label="닉네임")
 
     def validate_username(self, value):
         if User.objects.filter(username=value).exists():

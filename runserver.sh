@@ -20,4 +20,8 @@ export DATABASE_ENGINE=django.db.backends.mysql \
 
 
 # for development
+
+
 cd libido_api && python3 manage.py runserver 8000 --settings=libido_api.settings.development
+
+# cd libido_api && python3 manage.py createsuperuser --settings=libido_api.settings.development
