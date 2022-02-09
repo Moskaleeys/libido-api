@@ -158,7 +158,7 @@ class UserViewSet(DeleteMixin, BaseViewSet):
 
 
 class MyFriendViewSet(viewsets.ModelViewSet):
-    __basic_fields = ("id", "user", "friend", "is_approved", "created_at", "deleted_at")
+    __basic_fields = ("id", "user", "friend", "is_approved", "created_at")
     parent = UserViewSet
     parent_object = User
     parent_lookup_field = "user"
@@ -174,11 +174,17 @@ class MyFriendViewSet(viewsets.ModelViewSet):
     filter_fields = __basic_fields
     search_fields = __basic_fields
 
+    # def get_queryset(self):
+    #     if isinstance(self.request.user, User):
+    #         qs = super().get_queryset().filter(users=self.request.user).order_by("-id")
+    #         return qs
+    #     qs = super().get_queryset().order_by("-id")
+    #     return qs
+
     def get_queryset(self):
-        if isinstance(self.request.user, User):
-            qs = super().get_queryset().filter(users=self.request.user).order_by("-id")
-            return qs
-        qs = super().get_queryset().order_by("-id")
+        queryset = super().get_queryset()
+        user = self.request.user
+        qs = queryset.select_related("user").filter(user=user).order_by("-id")
         return qs
 
     def get_serializer_class(self):
