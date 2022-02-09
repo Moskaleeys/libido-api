@@ -5,7 +5,7 @@ from django.db import transaction
 from rest_framework import serializers
 from social_django.models import UserSocialAuth
 
-from libido_users.models import User
+from libido_users.models import User, MyFriend
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -49,3 +49,9 @@ class RegisterSerializer(serializers.Serializer):
         )
 
         return user
+
+
+class MyFriendSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MyFriend
+        fields = "__all__"

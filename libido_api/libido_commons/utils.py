@@ -1,7 +1,7 @@
 import secrets
 
 
-def _generate_random_token(_len=20):
+def _generate_random_token(_len=25):
     return secrets.token_urlsafe(_len)
 
 

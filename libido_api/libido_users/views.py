@@ -19,10 +19,11 @@ from libido_commons import renderers
 from libido_commons.mixins import DeleteMixin
 from libido_commons.paginations import CommonPagination
 from libido_commons.permissions import NoCreate, NoDelete, NoRetrive
-from libido_users.models import User
+from libido_users.models import User, MyFriend
 from libido_users.serializers import (
     RegisterSerializer,
     UserSerializer,
+    MyFriendSerializer,
 )
 
 
@@ -34,9 +35,6 @@ class BaseViewSet(
     viewsets.GenericViewSet,
 ):
     pass
-
-
-# Create your views here.
 
 
 class UserViewSet(DeleteMixin, BaseViewSet):
@@ -139,7 +137,6 @@ class UserViewSet(DeleteMixin, BaseViewSet):
         permission_classes=[TokenHasReadWriteScope],
     )
     def withdrawal(self, request):
-        # 회원 탈퇴
         User.withdrawal(user_id=self.request.user.id)
         return Response({"result": True}, status=status.HTTP_200_OK)
 
@@ -158,3 +155,105 @@ class UserViewSet(DeleteMixin, BaseViewSet):
     def list(self, request):
         result = UserSerializer(instance=request.user)
         return Response(result.data, status=status.HTTP_200_OK)
+
+
+class MyFriendViewSet(BaseViewSet):
+    __basic_fields = ("id", "user", "friend", "is_approved", "created_at", "deleted_at")
+
+    queryset = MyFriend.objects.all().order_by("-id")
+    permission_classes = [TokenHasReadWriteScope]
+    renderer_classes = [renderers.LibidoApiJSONRenderer]
+    pagination_class = CommonPagination
+    serializer_action_classes = {
+        "list": MyFriendSerializer,
+    }
+
+    filter_fields = __basic_fields
+    search_fields = __basic_fields
+
+    def get_queryset(self):
+        if isinstance(self.request.user, User):
+            qs = super().get_queryset().filter(users=self.request.user).order_by("-id")
+            return qs
+        qs = super().get_queryset().order_by("-id")
+        return qs
+
+    def get_serializer_class(self):
+        try:
+            return self.serializer_action_classes[self.action]
+        except KeyError:
+            return UserSerializer
+
+    @swagger_auto_schema(
+        method="post",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                "friend_id": openapi.Schema(
+                    type=openapi.TYPE_INTEGER, description="친구요청 수락할 친구 PK"
+                ),
+            },
+        ),
+        responses={status.HTTP_200_OK: MyFriendSerializer},
+    )
+    @action(
+        methods=["POST"],
+        detail=False,
+        url_path="connect",
+        permission_classes=[TokenHasReadWriteScope],
+    )
+    def approve(self, request):
+        friend_id = request.data["friend_id"]
+        user_id = request.user.id
+        follow = MyFriend.approve(user_id=user_id, friend_id=friend_id)
+        serializers = MyFriendSerializer(instance=follow, allow_null=True)
+        return Response(serializers.data, status=status.HTTP_200_OK)
+
+    @swagger_auto_schema(
+        method="post",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                "friend_id": openapi.Schema(
+                    type=openapi.TYPE_INTEGER, description="친구 맺을 유저 PK"
+                ),
+            },
+        ),
+        responses={status.HTTP_200_OK: MyFriendSerializer},
+    )
+    @action(
+        methods=["POST"],
+        detail=False,
+        url_path="connect",
+        permission_classes=[TokenHasReadWriteScope],
+    )
+    def connect(self, request):
+        friend_id = request.data["friend_id"]
+        user_id = request.user.id
+        follow = MyFriend.connect(user_id=user_id, friend_id=friend_id)
+        serializers = MyFriendSerializer(instance=follow, allow_null=True)
+        return Response(serializers.data, status=status.HTTP_200_OK)
+
+    @swagger_auto_schema(
+        method="post",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                "friend_id": openapi.Schema(
+                    type=openapi.TYPE_INTEGER, description="친구 삭제할 유저 PK"
+                ),
+            },
+        ),
+        responses={status.HTTP_200_OK: MyFriendSerializer},
+    )
+    @action(
+        methods=["POST"],
+        detail=False,
+        url_path="disconnect",
+        permission_classes=[TokenHasReadWriteScope],
+    )
+    def disconnect(self, request):
+        friend_id = request.data["friend_id"]
+        user_id = request.user.id
+        MyFriend.disconnect(user_id=user_id, friend_id=friend_id)
+        return Response(None, status=status.HTTP_204_NO_CONTENT)

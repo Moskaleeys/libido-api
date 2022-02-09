@@ -313,19 +313,21 @@ class User(AbstractUser, PrintableModel):
 
     id = models.CharField(
         db_index=True,
-        max_length=40,
+        max_length=45,
         default=_generate_random_token,
         primary_key=True,
     )
 
     is_active = models.BooleanField(
         default=True,
+        db_index=True,
         verbose_name="활성화 상태",
         help_text="액티브된 유저 유무 확인 is_active 가 false로 된경우 accesstoken을 받아올 수 없다.",
     )
 
     nickname = models.CharField(
         verbose_name="외부 노출 닉네임",
+        db_index=True,
         max_length=50,
         blank=True,
         null=True,
@@ -355,7 +357,12 @@ class User(AbstractUser, PrintableModel):
     )
 
     mobile = models.CharField(
-        verbose_name="핸드폰 번호", max_length=50, blank=True, null=True, help_text="핸드폰 번호"
+        db_index=True,
+        verbose_name="핸드폰 번호",
+        max_length=50,
+        blank=True,
+        null=True,
+        help_text="핸드폰 번호",
     )
 
     last_login = models.DateTimeField(
@@ -410,11 +417,90 @@ class User(AbstractUser, PrintableModel):
     def __str__(self):
         return f"{self.username} {self.nickname}"
 
-    def __repr__(self):
-        return f"{self.username} {self.nickname}"
-
     class Meta:
         verbose_name = "사용자"
         verbose_name_plural = "사용자 모음"
         db_table = "user"
         managed = True
+
+
+class MyFriend(PrintableModel):
+    user = models.ForeignKey(
+        get_user_model(),
+        verbose_name="사용자",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="myfriend_user",
+        help_text="유저",
+    )
+
+    friend = models.ForeignKey(
+        get_user_model(),
+        verbose_name="친구",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="myfriend_friend",
+        help_text="친구",
+    )
+
+    is_approved = models.BooleanField(
+        default=False,
+        verbose_name="수락 상태",
+        help_text="친구요청 수락 상태",
+    )
+
+    created_at = models.DateTimeField(
+        verbose_name="친구초대 요청 시간",
+        default=timezone.localtime,
+        help_text="친구초대 요청시간",
+    )
+
+    def __str__(self):
+        return f"{self.user} {self.friend}"
+
+    @classmethod
+    def approve(cls, user_id, friend_id):
+        try:
+            myfriend = cls.objects.filter(
+                users_id=user_id,
+                friend_id=friend_id,
+            )
+            myfriend.is_approved = True
+            myfriend.save()
+
+        except Exception:
+            return False
+        return True
+
+    @classmethod
+    def connect(cls, user_id, friend_id):
+        # exception 및 예외처리 구현 필요
+        myfriend, flag = cls.objects.get_or_create(
+            users_id=user_id,
+            friend_id=friend_id,
+        )
+        return myfriend
+
+    @classmethod
+    def disconnect(cls, user_id, friend_id):
+        # exception 및 예외처리 구현 필요
+        try:
+            myfriend = cls.objects.filter(
+                users_id=user_id,
+                friend_id=friend_id,
+            )
+            myfriend.delete()
+        except Exception:
+            return False
+        return True
+
+    class Meta:
+        verbose_name = "친구"
+        verbose_name_plural = "친구 모음"
+        db_table = "friend"
+        managed = True
+        constraints = [
+            models.UniqueConstraint(fields=["user", "friend"], name="unique_status")
+        ]
