@@ -25,6 +25,7 @@ Deprecated==1.2.13
 Django==3.2.12
 django-appconf==1.0.5
 django-braces==1.15.0
+django-countries==7.2.1
 django-filter==21.1
 django-imagekit==4.1.0
 django-oauth-toolkit==1.7.0
