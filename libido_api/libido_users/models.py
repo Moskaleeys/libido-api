@@ -13,6 +13,7 @@ import uuid
 
 from django_countries.fields import CountryField
 from django.conf import settings
+from django.db.models import Q
 from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import AbstractUser, UserManager
@@ -345,7 +346,7 @@ class User(AbstractUser, PrintableModel):
         help_text="자기소개",
     )
 
-    country = CountryField(null=True, blank=True, help_text="국가 필드")
+    country = CountryField(null=False, help_text="국가 필드", default="KR")
 
     thumb = ProcessedImageField(
         blank=True,
@@ -459,6 +460,13 @@ class MyFriend(PrintableModel):
 
     def __str__(self):
         return f"{self.user} {self.friend}"
+
+    @classmethod
+    def randoms(cls, user_id):
+        my_friends = cls.objects.filter(user_id=user_id, is_approved=True).values_list(
+            "friend_id", flat=True
+        )
+        return User.objects.filter(~Q(id__in=[my_friends]))
 
     @classmethod
     def approve(cls, user_id, friend_id):

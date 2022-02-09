@@ -248,6 +248,26 @@ class MyFriendViewSet(BaseViewSet):
         method="post",
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
+            properties={},
+        ),
+        responses={status.HTTP_200_OK: MyFriendSerializer},
+    )
+    @action(
+        methods=["POST"],
+        detail=False,
+        url_path="randoms",
+        permission_classes=[TokenHasReadWriteScope],
+    )
+    def randoms(self, request, *args, **kwargs):
+        user_id = request.user.id
+        randomic = MyFriend.randoms(user_id=user_id)
+        serializers = UserSerializer(instance=randomic, allow_null=True, many=True)
+        return Response(serializers.data, status=status.HTTP_200_OK)
+
+    @swagger_auto_schema(
+        method="post",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
             properties={
                 "friend_id": openapi.Schema(
                     type=openapi.TYPE_INTEGER, description="친구 삭제할 유저 PK"
