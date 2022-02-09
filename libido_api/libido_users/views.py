@@ -2,7 +2,6 @@ from django.contrib.auth import get_user_model
 from django.core.cache import cache
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
-from django_filters.rest_framework import DjangoFilterBackend
 from oauth2_provider.contrib.rest_framework import (
     TokenHasReadWriteScope,
     TokenMatchesOASRequirements,
@@ -11,6 +10,7 @@ from oauth2_provider.models import AccessToken, get_application_model
 from rest_framework import status, viewsets
 from rest_framework import mixins, viewsets
 from rest_framework.decorators import action
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.response import Response
 

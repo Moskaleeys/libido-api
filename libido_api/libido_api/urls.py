@@ -18,6 +18,7 @@ from django.conf.urls import include, url
 from django.urls import path
 
 import libido_auths.urls as auth_urls
+import libido_services.urls as service_urls
 import libido_users.urls as users_urls
 
 from drf_yasg import openapi
@@ -40,6 +41,8 @@ urlpatterns = [
     path("libido_admin/", admin.site.urls),
     url(r"^v1/", include(auth_urls)),
     url(r"^v1/", include(users_urls)),
+    url(r"^v1/", include(service_urls)),
+    path("summernote/", include("django_summernote.urls")),
     url(r"^v9999/auth/", include("rest_framework_social_oauth2.urls")),  # dummpy auth
 ]
 

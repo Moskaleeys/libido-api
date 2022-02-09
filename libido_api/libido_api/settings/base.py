@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django_summernote",
     "storages",
     "drf_yasg",
     "oauth2_provider",
@@ -45,6 +46,7 @@ INSTALLED_APPS = [
     "rest_framework_social_oauth2",
     "libido_users",
     "libido_auths",
+    "libido_services",
 ]
 
 MIDDLEWARE = [
