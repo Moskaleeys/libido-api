@@ -24,6 +24,7 @@ class RegisterSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
     username = serializers.CharField(label="이메일(유저네임)")
     password = serializers.CharField(label="비밀번호")
+    country = serializers.CharField(label="국가코드")
     mobile = serializers.CharField(label="핸드폰번호")
     nickname = serializers.CharField(label="닉네임")
 
@@ -38,6 +39,7 @@ class RegisterSerializer(serializers.Serializer):
             username=validated_data["username"],
             mobile=validated_data["mobile"],
             nickname=validated_data["nickname"],
+            country=validated_data["country"],
             password=make_password(
                 validated_data["password"],
                 salt=bcrypt.gensalt(11),
