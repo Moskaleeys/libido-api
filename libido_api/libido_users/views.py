@@ -157,9 +157,11 @@ class UserViewSet(DeleteMixin, BaseViewSet):
         return Response(result.data, status=status.HTTP_200_OK)
 
 
-class MyFriendViewSet(BaseViewSet):
+class MyFriendViewSet(viewsets.ModelViewSet):
     __basic_fields = ("id", "user", "friend", "is_approved", "created_at", "deleted_at")
-
+    parent = UserViewSet
+    parent_object = User
+    parent_lookup_field = "user"
     queryset = MyFriend.objects.all().order_by("-id")
     permission_classes = [TokenHasReadWriteScope]
     renderer_classes = [renderers.LibidoApiJSONRenderer]
