@@ -214,8 +214,8 @@ class MyFriendViewSet(viewsets.ModelViewSet):
     def approve(self, request, *args, **kwargs):
         friend_id = request.data["friend_id"]
         user_id = request.user.id
-        follow = MyFriend.approve(user_id=user_id, friend_id=friend_id)
-        serializers = MyFriendSerializer(instance=follow, allow_null=True)
+        friend = MyFriend.approve(user_id=user_id, friend_id=friend_id)
+        serializers = MyFriendSerializer(instance=friend, allow_null=True)
         return Response(serializers.data, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(

@@ -469,10 +469,10 @@ class MyFriend(PrintableModel):
             )
             myfriend.is_approved = True
             myfriend.save()
+            return myfriend
 
         except Exception:
             return False
-        return True
 
     @classmethod
     def connect(cls, user_id, friend_id):
