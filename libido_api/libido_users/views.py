@@ -163,7 +163,7 @@ class MyFriendViewSet(viewsets.ModelViewSet):
     parent_object = User
     parent_lookup_field = "user"
     lookup_field = "user"
-    queryset = MyFriend.objects.all().order_by("-id")
+    queryset = MyFriend.objects.filter().order_by("-id")
     permission_classes = [TokenHasReadWriteScope]
     renderer_classes = [renderers.LibidoApiJSONRenderer]
     pagination_class = CommonPagination
@@ -185,7 +185,7 @@ class MyFriendViewSet(viewsets.ModelViewSet):
         try:
             return self.serializer_action_classes[self.action]
         except KeyError:
-            return UserSerializer
+            return MyFriendSerializer
 
     @swagger_auto_schema(
         method="post",
