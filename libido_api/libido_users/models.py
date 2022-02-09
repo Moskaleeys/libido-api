@@ -412,6 +412,10 @@ class User(AbstractUser, PrintableModel):
         return cls.objects.filter(username=username).exists()
 
     @classmethod
+    def check_nickname(cls, nickname):
+        return cls.objects.filter(nickname=nickname).exists()
+
+    @classmethod
     def check_userid(cls, userid):
         return cls.objects.filter(userid=userid).exists()
 

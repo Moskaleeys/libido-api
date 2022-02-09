@@ -95,6 +95,25 @@ class UserViewSet(DeleteMixin, BaseViewSet):
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             properties={
+                "nickname": openapi.Schema(
+                    type=openapi.TYPE_STRING, description="유저네임(이메일주소)"
+                ),
+            },
+        ),
+    )
+    @action(
+        methods=["POST"], detail=False, url_path="check_nickname", permission_classes=[]
+    )
+    def check_nickname(self, request):
+        nickname = request.data["nickname"]
+        is_duplicate = User.check_nickname(nickname=nickname)
+        return Response({"is_duplicate": is_duplicate}, status=status.HTTP_200_OK)
+
+    @swagger_auto_schema(
+        method="post",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
                 "mobile": openapi.Schema(type=openapi.TYPE_STRING, description="핸드폰번호"),
             },
         ),
