@@ -464,7 +464,7 @@ class MyFriend(PrintableModel):
     def approve(cls, user_id, friend_id):
         try:
             myfriend = cls.objects.filter(
-                users_id=user_id,
+                user_id=user_id,
                 friend_id=friend_id,
             )
             myfriend.is_approved = True
@@ -478,7 +478,7 @@ class MyFriend(PrintableModel):
     def connect(cls, user_id, friend_id):
         # exception 및 예외처리 구현 필요
         myfriend, flag = cls.objects.get_or_create(
-            users_id=user_id,
+            user_id=user_id,
             friend_id=friend_id,
         )
         return myfriend
@@ -488,7 +488,7 @@ class MyFriend(PrintableModel):
         # exception 및 예외처리 구현 필요
         try:
             myfriend = cls.objects.filter(
-                users_id=user_id,
+                user_id=user_id,
                 friend_id=friend_id,
             )
             myfriend.delete()

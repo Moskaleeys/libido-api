@@ -162,6 +162,7 @@ class MyFriendViewSet(viewsets.ModelViewSet):
     parent = UserViewSet
     parent_object = User
     parent_lookup_field = "user"
+    lookup_field = "user"
     queryset = MyFriend.objects.all().order_by("-id")
     permission_classes = [TokenHasReadWriteScope]
     renderer_classes = [renderers.LibidoApiJSONRenderer]
@@ -201,10 +202,10 @@ class MyFriendViewSet(viewsets.ModelViewSet):
     @action(
         methods=["POST"],
         detail=False,
-        url_path="connect",
+        url_path="approve",
         permission_classes=[TokenHasReadWriteScope],
     )
-    def approve(self, request):
+    def approve(self, request, *args, **kwargs):
         friend_id = request.data["friend_id"]
         user_id = request.user.id
         follow = MyFriend.approve(user_id=user_id, friend_id=friend_id)
@@ -229,7 +230,7 @@ class MyFriendViewSet(viewsets.ModelViewSet):
         url_path="connect",
         permission_classes=[TokenHasReadWriteScope],
     )
-    def connect(self, request):
+    def connect(self, request, *args, **kwargs):
         friend_id = request.data["friend_id"]
         user_id = request.user.id
         follow = MyFriend.connect(user_id=user_id, friend_id=friend_id)
@@ -254,7 +255,7 @@ class MyFriendViewSet(viewsets.ModelViewSet):
         url_path="disconnect",
         permission_classes=[TokenHasReadWriteScope],
     )
-    def disconnect(self, request):
+    def disconnect(self, request, *args, **kwargs):
         friend_id = request.data["friend_id"]
         user_id = request.user.id
         MyFriend.disconnect(user_id=user_id, friend_id=friend_id)

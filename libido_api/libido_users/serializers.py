@@ -52,6 +52,12 @@ class RegisterSerializer(serializers.Serializer):
 
 
 class MyFriendSerializer(serializers.ModelSerializer):
+    friend_nickname = serializers.ReadOnlyField(
+        source="friend.nickname", allow_null=True
+    )
+    friend_thumb = serializers.ReadOnlyField(source="friend.thumb_url", allow_null=True)
+    friend_email = serializers.ReadOnlyField(source="friend.username", allow_null=True)
+
     class Meta:
         model = MyFriend
         fields = "__all__"
