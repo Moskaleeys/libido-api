@@ -28,7 +28,8 @@ from libido_users.serializers import (
 
 
 class BaseViewSet(
-    mixins.CreateModelMixin,
+    # mixins.CreateModelMixin,
+    mixins.ListModelMixin,  # retrive open -> user_id retrive
     mixins.RetrieveModelMixin,  # retrive open -> user_id retrive
     # mixins.UpdateModelMixin,
     mixins.DestroyModelMixin,
@@ -157,7 +158,7 @@ class UserViewSet(DeleteMixin, BaseViewSet):
         return Response(result.data, status=status.HTTP_200_OK)
 
 
-class MyFriendViewSet(viewsets.ModelViewSet):
+class MyFriendViewSet(BaseViewSet):
     __basic_fields = ("id", "user", "friend", "is_approved", "created_at")
     parent = UserViewSet
     parent_object = User
