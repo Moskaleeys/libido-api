@@ -119,6 +119,23 @@ REST_FRAMEWORK = {
     # 'PAGE_SIZE': 100
 }
 
+AUTHENTICATION_BACKENDS = (
+    # Naver
+    "social_core.backends.naver.NaverOAuth2",
+    # Google
+    "social_core.backends.google.GoogleOAuth2",
+    # FB
+    "social_core.backends.facebook.FacebookOAuth2",
+    # Apple
+    "social_core.backends.apple.AppleIdAuth",
+    # Kakao
+    # 'social_core.backends.kakao.KakaoOAuth2',
+    "crypto_commons.backends.CustomKakaOAuth2",
+    # DRF
+    "rest_framework_social_oauth2.backends.DjangoOAuth2",
+    # Django
+    "django.contrib.auth.backends.ModelBackend",
+)
 
 DATABASES = {
     "default": {

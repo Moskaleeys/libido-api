@@ -131,3 +131,12 @@ CHANNEL_LAYERS = {
         },
     },
 }
+
+# social naver
+SOCIAL_AUTH_NAVER_KEY = "ipyqHeQ5gpL7mwpyGadxL"
+SOCIAL_AUTH_NAVER_SECRET = "NCBZKqpex8C"
+
+
+# social google
+SOCIAL_AUTH_GOOGLE_OAUTH_KEY = "AIzaSyDiAIch5CT4xH02m2dWAXLOQi8BDyyrzrY"
+SOCIAL_AUTH_GOOGLE_OAUTH_SECRET = ""
