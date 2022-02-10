@@ -83,13 +83,16 @@ class Room(PrintableModel):
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
+        db_index=True,
         related_name="room_moderator",
         help_text="방장(모더레이터)",
     )
 
-    title = models.CharField(max_length=100, null=True, blank=True, help_text="타이틀")
+    title = models.CharField(
+        db_index=True, max_length=100, null=True, blank=True, help_text="타이틀"
+    )
     description = models.TextField(null=True, blank=True, help_text="방 설명")
-    is_public = models.BooleanField(default=True, help_text="공개방 여부")
+    is_public = models.BooleanField(db_index=True, default=True, help_text="공개방 여부")
     password = models.CharField(blank=True, null=True, max_length=250, help_text="비밀번호")
     user_count = models.PositiveIntegerField(
         null=True, blank=True, default=0, help_text="접속한 사람수"
@@ -103,6 +106,14 @@ class Room(PrintableModel):
     )
 
     created_at = models.DateTimeField(db_index=True, default=timezone.now)
+
+    deleted_at = models.DateTimeField(
+        null=True,
+        default=None,
+        blank=True,
+        db_index=True,
+        help_text="탈퇴 또는 삭제한 시간",
+    )
 
     class Meta:
         verbose_name = "방"
