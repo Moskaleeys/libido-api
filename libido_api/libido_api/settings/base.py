@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "django_filters",
     "social_django",
     "rest_framework_social_oauth2",
+    "libido_rooms",
     "libido_users",
     "libido_auths",
     "libido_services",

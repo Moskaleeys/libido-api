@@ -420,6 +420,7 @@ class User(AbstractUser, PrintableModel):
         return cls.objects.filter(userid=userid).exists()
 
     def __str__(self):
+
         return f"{self.username} {self.nickname}"
 
     class Meta:
