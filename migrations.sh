@@ -20,4 +20,5 @@ export DATABASE_ENGINE=django.db.backends.mysql \
     AWS_S3_REGION_NAME=ap-northeast-2
 
 # for development
-cd libido_api && python3 manage.py collectstatic --noinput --settings=libido_api.settings.development && python3 manage.py makemigrations --settings=libido_api.settings.development && python3 manage.py migrate --settings=libido_api.settings.development
+# cd libido_api && python3 manage.py collectstatic --noinput --settings=libido_api.settings.development && python3 manage.py makemigrations --settings=libido_api.settings.development && python3 manage.py migrate --settings=libido_api.settings.development
+cd libido_api && python3 manage.py makemigrations --settings=libido_api.settings.development && python3 manage.py migrate --settings=libido_api.settings.development

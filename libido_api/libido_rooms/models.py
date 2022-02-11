@@ -105,6 +105,13 @@ class Room(PrintableModel):
         help_text="룸 카테고리들",
     )
 
+    contents = models.ManyToManyField(
+        "libido_contents.Content",
+        through="libido_rooms.RoomContent",
+        blank=True,
+        help_text="룸 콘텐츠",
+    )
+
     created_at = models.DateTimeField(db_index=True, default=timezone.now)
 
     deleted_at = models.DateTimeField(
@@ -155,5 +162,42 @@ class RoomCategory(PrintableModel):
         constraints = [
             models.UniqueConstraint(
                 fields=["category", "room"], name="unique_category_room"
+            )
+        ]
+
+
+class RoomContent(PrintableModel):
+    content = models.ForeignKey(
+        "libido_contents.Content",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="roomcontent_content",
+        help_text="콘텐츠",
+    )
+
+    room = models.ForeignKey(
+        "libido_rooms.Room",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="roomcontent_room",
+        help_text="스트리밍 방",
+    )
+
+    created_at = models.DateTimeField(db_index=True, default=timezone.now)
+
+    def __str__(self):
+        return f"{self.id} {self.category} {self.room}"
+
+    class Meta:
+        verbose_name = "방 콘텐츠"
+        verbose_name_plural = "방 콘텐츠 모음"
+        db_table = "room_content"
+        managed = True
+
+        constraints = [
+            models.UniqueConstraint(
+                fields=["content", "room"], name="unique_content_room"
             )
         ]

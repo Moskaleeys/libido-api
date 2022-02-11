@@ -1,5 +1,6 @@
 from django.contrib import admin
 from libido_rooms.models import Room, Category, RoomCategory
+from libido_contents.models import Content
 
 # Register your models here.
 
@@ -8,6 +9,20 @@ class CategoryTemplateInline(admin.TabularInline):
     extra = 0
     model = Room.category.through
     show_change_link = True
+
+class ContentInline(admin.TabularInline):
+    extra = 0
+    exclude = [
+        "title",
+        "thumb",
+        "url",
+        "published_at",
+        "created_at",
+        "deleted_at",
+    ]
+
+    show_change_link = True
+    model = Content
 
 
 class RoomAdmin(admin.ModelAdmin):

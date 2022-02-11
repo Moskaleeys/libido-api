@@ -51,9 +51,11 @@ def upload_thumb(instance, filename):
 
 
 class Content(PrintableModel):
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=100, blank=True, null=True)
     description = models.TextField(null=True, blank=True, help_text="방 설명")
-    link_url = models.URLField(max_length=500)
+    url = models.URLField(max_length=500, blank=True, null=True)
+    channel_id = models.CharField(max_length=50, null=True, blank=True)
+    channel_title = models.CharField(max_length=50, null=True, blank=True)
     thumb = ProcessedImageField(
         blank=True,
         null=True,
@@ -64,19 +66,16 @@ class Content(PrintableModel):
     )
 
     running_time = models.TimeField(null=True, blank=True, help_text="러닝타임")
-    # view_count = models.PositiveIntegerField(null=True, default=0)
-    # like_count = models.PositiveIntegerField(null=True)
-    # dislike_count = models.PositiveIntegerField(null=True)
-    channel_id = models.CharField(max_length=50, null=True)
-    channel_title = models.CharField(max_length=50, null=True)
-    published_at = models.CharField(max_length=50, null=True)
+    published_at = models.DateField(null=True, blank=True)
+    created_at = models.DateTimeField(db_index=True, default=timezone.now)
 
-    # content_categories = models.ForeignKey(
-    #     "ContentCategory", on_delete=models.CASCADE, related_name="contents"
-    # )
-    # content_tags = models.ManyToManyField(
-    #     "Tag", through="ContentTag", related_name="contents"
-    # )
+    deleted_at = models.DateTimeField(
+        null=True,
+        default=None,
+        blank=True,
+        db_index=True,
+        help_text="삭제한 시간",
+    )
 
     class Meta:
         verbose_name = "콘텐츠"
