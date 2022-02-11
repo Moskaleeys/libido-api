@@ -52,8 +52,9 @@ def upload_thumb(instance, filename):
 
 class Content(PrintableModel):
     title = models.CharField(max_length=100, blank=True, null=True)
-    description = models.TextField(null=True, blank=True, help_text="방 설명")
     url = models.URLField(max_length=500, blank=True, null=True)
+    description = models.TextField(null=True, blank=True, help_text="방 설명")
+    thumb_url = models.URLField(max_length=500, blank=True, null=True)
     channel_id = models.CharField(max_length=50, null=True, blank=True)
     channel_title = models.CharField(max_length=50, null=True, blank=True)
     thumb = ProcessedImageField(
@@ -64,6 +65,10 @@ class Content(PrintableModel):
         format="JPEG",
         options={"quality": 90},
     )
+
+    view_count = models.PositiveIntegerField(null=True, default=0, blank=True)
+    like_count = models.PositiveIntegerField(null=True, default=0, blank=True)
+    dislike_count = models.PositiveIntegerField(null=True, default=0, blank=True)
 
     running_time = models.TimeField(null=True, blank=True, help_text="러닝타임")
     published_at = models.DateField(null=True, blank=True)
