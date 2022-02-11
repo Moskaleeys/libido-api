@@ -122,6 +122,9 @@ class Room(PrintableModel):
         help_text="탈퇴 또는 삭제한 시간",
     )
 
+    def __str__(self):
+        return f"{self.title}"
+
     class Meta:
         verbose_name = "방"
         verbose_name_plural = "방 모음"

@@ -3,7 +3,7 @@ from libido_contents.models import Content
 
 
 class ContentAdmin(admin.ModelAdmin):
-    search_fields = ["title", "desctiption"]
+    search_fields = ["title"]
     list_display = [
         "id",
         "title",

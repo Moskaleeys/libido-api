@@ -7,11 +7,14 @@ from libido_contents.models import Content
 
 class CategoryTemplateInline(admin.TabularInline):
     extra = 0
+    autocomplete_fields = ["category"]
     model = Room.category.through
     show_change_link = True
 
+
 class ContentInline(admin.TabularInline):
     extra = 0
+    autocomplete_fields = ["content"]
     exclude = [
         "title",
         "thumb",
@@ -22,11 +25,11 @@ class ContentInline(admin.TabularInline):
     ]
 
     show_change_link = True
-    model = Content
+    model = Room.contents.through
 
 
 class RoomAdmin(admin.ModelAdmin):
-    inlines = [CategoryTemplateInline]
+    inlines = [CategoryTemplateInline, ContentInline]
     autocomplete_fields = ["moderator"]
     search_fields = ["title", "desctiption", "moderator"]
     list_display = [

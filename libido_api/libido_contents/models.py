@@ -77,6 +77,9 @@ class Content(PrintableModel):
         help_text="삭제한 시간",
     )
 
+    def __str__(self):
+        return f"{self.title}"
+
     class Meta:
         verbose_name = "콘텐츠"
         verbose_name_plural = "콘텐츠 모음"
