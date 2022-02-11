@@ -52,7 +52,7 @@ def upload_thumb(instance, filename):
 
 class Content(PrintableModel):
     title = models.CharField(max_length=100, blank=True, null=True)
-    url = models.URLField(max_length=500, blank=True, null=True)
+    url = models.URLField(max_length=550, blank=True, null=True, unique=True)
     description = models.TextField(null=True, blank=True, help_text="방 설명")
     thumb_url = models.URLField(max_length=500, blank=True, null=True)
     channel_id = models.CharField(max_length=50, null=True, blank=True)
