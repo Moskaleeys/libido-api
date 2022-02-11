@@ -191,7 +191,7 @@ class RoomContent(PrintableModel):
     created_at = models.DateTimeField(db_index=True, default=timezone.now)
 
     def __str__(self):
-        return f"{self.id} {self.category} {self.room}"
+        return f"{self.id} {self.content} {self.room}"
 
     class Meta:
         verbose_name = "방 콘텐츠"

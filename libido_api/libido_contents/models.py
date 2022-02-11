@@ -60,7 +60,7 @@ class Content(PrintableModel):
         blank=True,
         null=True,
         upload_to=upload_thumb,
-        processors=[Thumbnail(150, 150)],
+        processors=[Thumbnail(350, 350)],
         format="JPEG",
         options={"quality": 90},
     )
