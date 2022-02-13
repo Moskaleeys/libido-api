@@ -36,7 +36,15 @@ class RoomViewSet(
     mixins.RetrieveModelMixin,  # retrive open -> user_id retrive
     viewsets.GenericViewSet,
 ):
-    __basic_fields = ("id", "title", "description", "category__name")
+    __basic_fields = (
+        "id",
+        "title",
+        "description",
+        "category__name",
+        "moderator__username",
+        "moderator__email",
+        "moderator__id",
+    )
     permission_classes = [
         permissions.AllowRetriveList,
     ]
