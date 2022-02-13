@@ -133,19 +133,21 @@ class Room(PrintableModel):
         except Exception:
             raise exceptions.RoomNotFoundError
 
-    def check_password(self, pw):
-        try:
-            if self.password is None:
-                return True
-            passwd = f"{pw}".encode()
-            __import__("ipdb").set_trace()
-            if bcrypt.checkpw(passwd, self.password.encode()):
-                return True
-            else:
-                return False
+    @classmethod
+    def set_password(cls, pw):
+        passwd = f"{pw}".encode()
+        salt = bcrypt.gensalt()
+        password = bcrypt.hashpw(passwd, salt).decode()
+        return password
 
-        except Exception as e:
-            print(e)
+    def check_password(self, pw):
+        if self.password is None:
+            return True
+
+        passwd = f"{pw}".encode()
+        if bcrypt.checkpw(passwd, self.password.encode()):
+            return True
+        else:
             return False
 
     class Meta:

@@ -26,6 +26,7 @@ class RoomSerializer(serializers.ModelSerializer):
 
 
 class RegisterRoomSerializer(serializers.Serializer):
+    id = serializers.ReadOnlyField()
     title = serializers.CharField(required=True, help_text="타이틀", label="타이틀")
     description = serializers.CharField(required=True, help_text="설명", label="설명")
     password = serializers.CharField(help_text="비밀번호", label="비밀번호")
@@ -54,9 +55,7 @@ class RegisterRoomSerializer(serializers.Serializer):
         else:
             is_public = False
             # make password
-            passwd = f"{password}".encode()
-            salt = bcrypt.gensalt()
-            password = bcrypt.hashpw(passwd, salt).decode()
+            password = Room.set_password(pw=password)
 
         room = Room.objects.create(
             moderator=user,
