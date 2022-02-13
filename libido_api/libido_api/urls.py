@@ -21,6 +21,7 @@ import libido_auths.urls as auth_urls
 import libido_services.urls as service_urls
 import libido_rooms.urls as rooms_urls
 import libido_users.urls as users_urls
+import libido_contents.urls as contents_urls
 
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
@@ -44,6 +45,7 @@ urlpatterns = [
     url(r"^v1/", include(users_urls)),
     url(r"^v1/", include(service_urls)),
     url(r"^v1/", include(rooms_urls)),
+    url(r"^v1/", include(contents_urls)),
     path("summernote/", include("django_summernote.urls")),
     url(r"^v9999/auth/", include("rest_framework_social_oauth2.urls")),  # dummpy auth
 ]
