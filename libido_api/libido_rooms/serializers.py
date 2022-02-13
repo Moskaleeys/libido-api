@@ -57,12 +57,15 @@ class RegisterRoomSerializer(serializers.Serializer):
             # make password
             password = Room.set_password(pw=password)
 
+        contents_query = Content.objects.filter(id__in=content_ids)
+        play_lists_count = contents_query.count()
         room = Room.objects.create(
             moderator=user,
             title=title,
+            play_lists_count=play_lists_count,
             description=description,
             is_public=is_public,
             password=password,
         )
-        room.contents.add(*Content.objects.filter(id__in=content_ids))
+        room.contents.add(*contents_query)
         return room

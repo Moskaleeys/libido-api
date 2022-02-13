@@ -41,6 +41,7 @@ class RoomViewSet(
         "title",
         "description",
         "category__name",
+        "play_lists_count",
         "moderator__username",
         "moderator__email",
         "moderator__id",

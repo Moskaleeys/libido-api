@@ -99,6 +99,10 @@ class Room(PrintableModel):
         null=True, blank=True, default=0, help_text="접속한 사람수"
     )
 
+    play_lists_count = models.PositiveIntegerField(
+        null=True, blank=True, default=0, help_text="플레이 리스트 카운트"
+    )
+
     category = models.ManyToManyField(
         "libido_rooms.Category",
         through="libido_rooms.RoomCategory",
