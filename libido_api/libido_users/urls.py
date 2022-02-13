@@ -5,11 +5,11 @@ from rest_framework_nested.routers import NestedSimpleRouter
 
 from libido_users.views import UserViewSet, MyFriendViewSet
 
-default_router = DefaultRouter(trailing_slash=False)
-default_router.register(r"users", UserViewSet, basename="users")
+user_router = DefaultRouter(trailing_slash=False)
+user_router.register(r"users", UserViewSet, basename="users")
 
 myfriend_router = NestedSimpleRouter(
-    default_router, "users", lookup="users", trailing_slash=False
+    user_router, "users", lookup="users", trailing_slash=False
 )
 
 myfriend_router.register(
@@ -20,6 +20,6 @@ myfriend_router.register(
 
 
 urlpatterns = [
-    url(r"^", include(default_router.urls)),
+    url(r"^", include(user_router.urls)),
     url(r"^", include(myfriend_router.urls)),
 ]

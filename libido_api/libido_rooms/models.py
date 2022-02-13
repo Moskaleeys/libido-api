@@ -1,3 +1,4 @@
+import bcrypt
 from django.db import models
 import datetime
 from datetime import timedelta
@@ -124,6 +125,28 @@ class Room(PrintableModel):
 
     def __str__(self):
         return f"{self.title}"
+
+    @classmethod
+    def get_room(cls, pk):
+        try:
+            return cls.objects.get(id=pk)
+        except Exception:
+            raise exceptions.RoomNotFoundError
+
+    def check_password(self, pw):
+        try:
+            if self.password is None:
+                return True
+            passwd = f"{pw}".encode()
+            __import__("ipdb").set_trace()
+            if bcrypt.checkpw(passwd, self.password.encode()):
+                return True
+            else:
+                return False
+
+        except Exception as e:
+            print(e)
+            return False
 
     class Meta:
         verbose_name = "방"
