@@ -50,6 +50,28 @@ def upload_thumb(instance, filename):
     return f"contents/{content_id}/thumb/{_ts}{ext}"
 
 
+class Genre(PrintableModel):
+    name = models.CharField(
+        db_index=True,
+        max_length=50,
+        help_text="장르 이름",
+        unique=True,
+    )
+
+    created_at = models.DateTimeField(
+        verbose_name="Created at", db_index=True, default=timezone.now
+    )
+
+    def __str__(self):
+        return f"{self.name}"
+
+    class Meta:
+        verbose_name = "장르"
+        verbose_name_plural = "장르 모음"
+        db_table = "genre"
+        managed = True
+
+
 class Content(PrintableModel):
     title = models.CharField(max_length=100, blank=True, null=True)
     url = models.URLField(max_length=550, blank=True, null=True, unique=True)
@@ -64,6 +86,13 @@ class Content(PrintableModel):
         processors=[Thumbnail(350, 350)],
         format="JPEG",
         options={"quality": 90},
+    )
+
+    genre = models.ManyToManyField(
+        "libido_contents.Genre",
+        through="libido_contents.ContentGenre",
+        blank=True,
+        help_text="콘텐츠 장르",
     )
 
     view_count = models.PositiveIntegerField(null=True, default=0, blank=True)
@@ -90,3 +119,40 @@ class Content(PrintableModel):
         verbose_name_plural = "콘텐츠 모음"
         db_table = "content"
         managed = True
+
+
+class ContentGenre(PrintableModel):
+    genre = models.ForeignKey(
+        "libido_contents.Genre",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="contentgenre_genre",
+        help_text="장르",
+    )
+
+    content = models.ForeignKey(
+        "libido_contents.Content",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="contentgenre_content",
+        help_text="콘텐츠",
+    )
+
+    created_at = models.DateTimeField(db_index=True, default=timezone.now)
+
+    def __str__(self):
+        return f"{self.id} {self.genre}"
+
+    class Meta:
+        verbose_name = "콘텐츠 장르"
+        verbose_name_plural = "콘텐츠 장르 모음"
+        db_table = "content_genre"
+        managed = True
+
+        constraints = [
+            models.UniqueConstraint(
+                fields=["content", "genre"], name="unique_content_genre"
+            )
+        ]
