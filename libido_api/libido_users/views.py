@@ -19,7 +19,7 @@ from libido_commons import renderers
 from libido_commons.mixins import DeleteMixin
 from libido_commons.paginations import CommonPagination
 from libido_commons.permissions import NoCreate, NoDelete, NoRetrive
-from libido_users.models import User, MyFriend
+from libido_users.models import User, MyFriend, EmailAuth
 from libido_users.serializers import (
     RegisterSerializer,
     UserSerializer,
@@ -73,6 +73,7 @@ class UserViewSet(DeleteMixin, BaseViewSet):
 
     @swagger_auto_schema(
         method="post",
+        operation_summary="아이디 중복 검사",
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             properties={
@@ -92,6 +93,8 @@ class UserViewSet(DeleteMixin, BaseViewSet):
 
     @swagger_auto_schema(
         method="post",
+        operation_summary="닉네임 중복 검사",
+        operation_description="닉네임 중복검사 엔드포인트",
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             properties={
@@ -108,6 +111,71 @@ class UserViewSet(DeleteMixin, BaseViewSet):
         nickname = request.data["nickname"]
         is_duplicate = User.check_nickname(nickname=nickname)
         return Response({"is_duplicate": is_duplicate}, status=status.HTTP_200_OK)
+
+    @swagger_auto_schema(
+        method="post",
+        operation_summary="비밀번호 찾기 키값 검증 엔드포인트",
+        operation_description="비밀번호 찾기 이메일 확인 엔드포인트 - 리턴값으로 비밀번호 변경에 필요한 토큰 리턴",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                "email": openapi.Schema(type=openapi.TYPE_STRING, description="이메일"),
+                "auth_key": openapi.Schema(type=openapi.TYPE_STRING, description="인증키"),
+            },
+        ),
+    )
+    @action(methods=["post"], detail=False, permission_classes=[])
+    def inactive_email(self, request):
+        # 인엑티브 이메일이 된경우 # email 그리고 임시 pw를 받는다
+        # 그 다음 임시 토큰을 만들어서 프론트에 주도록 한다.
+        # 해당 토큰 유호 시간은 5분으로 정한다.
+        # 꼭 어세스 토큰만 발급을 해주고, 리프래시는 주지않는다.
+        email = self.request.data.get("email", None)
+        auth_key = self.request.data.get("auth_key", None)
+
+        if not email:
+            raise exceptions.EmailAuthKeyConfirmError
+
+        if not auth_key:
+            raise exceptions.EmailAuthKeyConfirmError
+
+        EmailAuth.confirm_number(email=email, key=auth_key)
+
+        token = User.tmp_token(email=email)
+        return Response({"access_token": token}, status=status.HTTP_200_OK)
+
+    @swagger_auto_schema(
+        method="post",
+        operation_summary="비밀번호 찾기용 인증메일발송",
+        operation_description="비밀번호찾기용 인증메일발송",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                "email": openapi.Schema(type=openapi.TYPE_STRING, description="이메일"),
+            },
+        ),
+    )
+    @action(
+        methods=["post"],
+        detail=False,
+        permission_classes=[],
+    )
+    def send_email_auth(self, request):
+        try:
+            email = request.data.get("email")
+            EmailAuth.gen_number(email=email)
+            return Response({"results": True}, status=status.HTTP_200_OK)
+
+        except AssertionError:
+            raise exceptions.ParameterError
+
+        except exceptions.InvalidEmailAddressError as e:
+            print(e)
+            raise exceptions.InvalidEmailAddressError
+
+        except Exception as e:
+            print(e)
+            return Response({"data": e.args[0]}, status=status.HTTP_400_BAD_REQUEST)
 
     @swagger_auto_schema(
         method="post",

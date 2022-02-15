@@ -46,6 +46,18 @@ class LibidoApiException(APIException):
         )
 
 
+class InvalidEmailAddressError(LibidoApiException):
+    error_code = 14
+    status_code = 400
+    default_detail = "InvalidEmailAddressError"
+
+
+class EmailAuthConfirmError(LibidoApiException):
+    error_code = 15
+    status_code = 400
+    default_detail = "EmailAuthConfirmError"
+
+
 class RoomNotFoundError(LibidoApiException):
     error_code = 700
     status_code = 200

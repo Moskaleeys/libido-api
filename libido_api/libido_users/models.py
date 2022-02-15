@@ -11,6 +11,8 @@ import sys
 import time
 import uuid
 
+from django.core.mail import EmailMessage, EmailMultiAlternatives, send_mail
+from django.core.validators import validate_email
 from django_countries.fields import CountryField
 from django.conf import settings
 from django.db.models import Q
@@ -396,6 +398,21 @@ class User(AbstractUser, PrintableModel):
     def is_exists(cls, username):
         return User.objects.filter(username=username).exists()
 
+    @classmethod
+    def tmp_token(cls, email, duration=60):
+        try:
+            Application = get_application_model()
+            app = Application.objects.filter().first()
+            user = cls.objects.get(username=email)
+            access_token = cls.get_token(
+                user=user, app=app, duration=duration, scope="read write tmp_token"
+            )
+
+        except Exception:
+            raise exceptions.CreateTmpTokenError
+
+        return access_token
+
     @property
     def thumb_url(self):
         try:
@@ -517,3 +534,96 @@ class MyFriend(PrintableModel):
         constraints = [
             models.UniqueConstraint(fields=["user", "friend"], name="unique_status")
         ]
+
+
+class EmailAuth(PrintableModel):
+    target_email = models.CharField(null=True, blank=True, max_length=50)
+
+    key = models.CharField(null=True, blank=True, max_length=50)
+
+    is_confirmed = models.BooleanField(default=False)
+    expired_at = models.DateTimeField(
+        null=True, blank=True, db_index=True, default=None
+    )
+    created_at = models.DateTimeField(db_index=True, default=timezone.now)
+    updated_at = models.DateTimeField(
+        null=True,
+        db_index=True,
+        auto_now=True,
+    )
+    deleted_at = models.DateTimeField(
+        null=True, blank=True, db_index=True, default=None
+    )
+
+    @classmethod
+    def gen_number(cls, email):
+        try:
+            validate_email(email)
+            assert User.objects.filter(username=email).exists() is True
+            # 해당 엔드포인트에서
+            # 무차별 대입 공격이 가능하기 때문에 꼭 Throttle 걸어야한다.
+            nums = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
+            random.shuffle(nums)
+            auth_no = "".join(nums)[:8]
+            email_auth = cls.objects.create(
+                key=auth_no,
+                target_email=email,
+                is_confirmed=False,
+                expired_at=timezone.now() + timedelta(minutes=8),
+            )
+
+            # email
+            cls.send_email_message(key=auth_no, email=email)
+
+            return email_auth
+
+        except AssertionError as e:
+            print(e)
+            raise exceptions.InvalidEmailAddressError
+
+        except ValidationError as e:
+            print(e)
+            raise exceptions.InvalidEmailAddressError
+
+    @classmethod
+    def send_email_message(cls, key, email):
+        email = EmailMessage(
+            "Hi!",  # 제목
+            f"""
+            A 'Find your password' attempt requires further verification 
+            because we did not recognize your device. 
+            To complete the 'Find your password', enter the verification code on your new device
+
+            Verification code: {key}
+
+            """,
+            f"{settings.EMAIL_HOST_USER}",
+            to=[email],
+        )
+        email.send()
+        return True
+
+    @classmethod
+    def confirm_number(cls, email, auth_key):
+        try:
+            mail = cls.objects.filter(
+                key=auth_key,
+                is_confirmed=False,
+                target_email=email,
+                expired_at__gte=timezone.now(),
+            ).order_by("-id")[0]
+
+            mail.is_confirmed = True
+            mail.save()
+
+        except Exception:
+            raise exceptions.EmailAuthConfirmError
+
+    def __str__(self):
+        return "{}".format(self.key)
+
+    class Meta:
+        verbose_name = "이메일 인증"
+        verbose_name_plural = "이메일 인증 모음"
+        db_table = "email_auth"
+        managed = True
