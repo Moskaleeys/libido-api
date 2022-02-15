@@ -124,8 +124,13 @@ class UserViewSet(DeleteMixin, BaseViewSet):
             },
         ),
     )
-    @action(methods=["post"], detail=False, permission_classes=[])
-    def inactive_email(self, request):
+    @action(
+        methods=["post"],
+        detail=False,
+        url_path="confirm_email_auth",
+        permission_classes=[],
+    )
+    def confirm_email_auth(self, request):
         # 인엑티브 이메일이 된경우 # email 그리고 임시 pw를 받는다
         # 그 다음 임시 토큰을 만들어서 프론트에 주도록 한다.
         # 해당 토큰 유호 시간은 5분으로 정한다.
@@ -134,12 +139,12 @@ class UserViewSet(DeleteMixin, BaseViewSet):
         auth_key = self.request.data.get("auth_key", None)
 
         if not email:
-            raise exceptions.EmailAuthKeyConfirmError
+            raise exceptions.EmailAuthConfirmError
 
         if not auth_key:
-            raise exceptions.EmailAuthKeyConfirmError
+            raise exceptions.EmailAuthConfirmError
 
-        EmailAuth.confirm_number(email=email, key=auth_key)
+        EmailAuth.confirm_number(email=email, auth_key=auth_key)
 
         token = User.tmp_token(email=email)
         return Response({"access_token": token}, status=status.HTTP_200_OK)
