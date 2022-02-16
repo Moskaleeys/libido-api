@@ -46,6 +46,12 @@ class LibidoApiException(APIException):
         )
 
 
+class LeaveRoomFailError(LibidoApiException):
+    error_code = 12
+    status_code = 400
+    default_detail = "LeaveRoomFailError"
+
+
 class InvalidRoomPasswordError(LibidoApiException):
     error_code = 13
     status_code = 400

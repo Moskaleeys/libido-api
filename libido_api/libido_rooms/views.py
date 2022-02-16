@@ -150,7 +150,6 @@ class UserRoomViewSet(viewsets.ModelViewSet):
                 "password": openapi.Schema(
                     type=openapi.TYPE_STRING, description="방 비밀번호"
                 ),
-                "room_id": openapi.Schema(type=openapi.TYPE_STRING, description="방 PK"),
             },
         ),
         responses={
@@ -162,13 +161,39 @@ class UserRoomViewSet(viewsets.ModelViewSet):
     )
     @action(
         methods=["POST"],
-        detail=False,
+        detail=True,
         permission_classes=[TokenHasReadWriteScope],
     )
     def join(self, request, *args, **kwargs):
         user_id = request.user.id
         password = request.data.get("password", None)
-        room_id = request.data.get("room_id", None)
+        room_id = kwargs["pk"]
         room = Room.join(room_id=room_id, password=password, user_id=user_id)
+        serializer = RoomSerializer(instance=room)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @swagger_auto_schema(
+        method="post",
+        operation_summary="방 나가기",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={},
+        ),
+        responses={
+            status.HTTP_200_OK: openapi.Schema(
+                type=openapi.TYPE_OBJECT,
+                properties={"result": openapi.Schema(type=openapi.TYPE_OBJECT)},
+            ),
+        },
+    )
+    @action(
+        methods=["POST"],
+        detail=True,
+        permission_classes=[TokenHasReadWriteScope],
+    )
+    def join(self, request, *args, **kwargs):
+        user_id = request.user.id
+        room_id = kwargs["pk"]
+        room = Room.leave(room_id=room_id, user_id=user_id)
         serializer = RoomSerializer(instance=room)
         return Response(serializer.data, status=status.HTTP_200_OK)

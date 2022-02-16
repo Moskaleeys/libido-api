@@ -148,10 +148,20 @@ class Room(PrintableModel):
     def join(cls, room_id, user_id, password):
         room = cls.get_room(pk=room_id)
         room.check_password(pw=password)
-
         room_user = RoomUser.objects.create(user_id=user_id, room_id=room_id)
-
         return room_user
+
+    @classmethod
+    def leave(cls, room_id, user_id):
+        try:
+            room = cls.get_room(pk=room_id)
+            room_user = RoomUser.objects.get(room_id=room_id, user_id=user_id)
+            room_user.delete()
+            room.user_count -= 1
+            room.save()
+            return room
+        except Exception:
+            raise exceptions.LeaveRoomFailError
 
     @classmethod
     def get_room(cls, pk):
