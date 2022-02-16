@@ -206,6 +206,11 @@ class UserViewSet(DeleteMixin, BaseViewSet):
             {"is_registered_number": is_registered}, status=status.HTTP_200_OK
         )
 
+    @swagger_auto_schema(
+        operation_summary="이메일 회원가입 ",
+        request_body=RegisterSerializer,
+        responses={201: RegisterSerializer},
+    )
     @action(methods=["POST"], detail=False, url_path="sign_up", permission_classes=[])
     def sign_up(self, request):
         serializer = self.get_serializer(data=request.data)
