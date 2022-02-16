@@ -627,3 +627,47 @@ class EmailAuth(PrintableModel):
         verbose_name_plural = "이메일 인증 모음"
         db_table = "email_auth"
         managed = True
+
+
+class Invitation(PrintableModel):
+    sender = models.ForeignKey(
+        get_user_model(),
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="invitation_sender",
+        help_text="발송자",
+    )
+    receiver = models.ForeignKey(
+        get_user_model(),
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="invitation_receiver",
+        help_text="수신자",
+    )
+
+    room = models.ForeignKey(
+        "libido_rooms.Room",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="invitation_room",
+        help_text="스트리밍 방",
+    )
+
+    is_approved = models.BooleanField(
+        default=False,
+        help_text="수락 상태",
+    )
+
+    created_at = models.DateTimeField(db_index=True, default=timezone.now)
+    deleted_at = models.DateTimeField(
+        null=True, blank=True, db_index=True, default=None
+    )
+
+    class Meta:
+        verbose_name = "초대장"
+        verbose_name_plural = "초대장 모음"
+        db_table = "invitation"
+        managed = True

@@ -22,6 +22,7 @@ from libido_commons.permissions import NoCreate, NoDelete, NoRetrive
 from libido_users.models import User, MyFriend, EmailAuth
 from libido_users.serializers import (
     RegisterSerializer,
+    SendInvitationSerializer,
     UserSerializer,
     MyFriendSerializer,
 )
@@ -262,6 +263,7 @@ class MyFriendViewSet(BaseViewSet):
     pagination_class = CommonPagination
     serializer_action_classes = {
         "list": MyFriendSerializer,
+        "send_invitation": SendInvitationSerializer,
     }
 
     filter_fields = __basic_fields
@@ -285,6 +287,23 @@ class MyFriendViewSet(BaseViewSet):
             return self.serializer_action_classes[self.action]
         except KeyError:
             return MyFriendSerializer
+
+    @swagger_auto_schema(
+        operation_summary="초대장 발송",
+        request_body=SendInvitationSerializer,
+        # responses={201: RoomSerializer},
+    )
+    @action(
+        methods=["POST"],
+        detail=False,
+        url_path="send_invitation",
+        permission_classes=[TokenHasReadWriteScope],
+    )
+    def send_invitation(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
         method="post",

@@ -5,7 +5,7 @@ from django.db import transaction
 from rest_framework import serializers
 from social_django.models import UserSocialAuth
 
-from libido_users.models import User, MyFriend
+from libido_users.models import User, MyFriend, Invitation
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -51,6 +51,35 @@ class RegisterSerializer(serializers.Serializer):
         return user
 
 
+class SendInvitationSerializer(serializers.Serializer):
+    receiver_ids = serializers.ListField(
+        child=serializers.CharField(),
+        required=True,
+        help_text="유저 아이디들",
+        label="유저 아이디들",
+        write_only=True,
+    )
+
+    room_id = serializers.CharField(required=True, label="스트리밍 방 pk", write_only=True)
+
+    def create(self, validated_data):
+        receiver_ids = validated_data.get("receiver_ids")
+        room_id = validated_data.get("room_id")
+        sender = getattr(self.context["request"], "user")
+        bulk_arr = []
+        for receiver_id in receiver_ids:
+            bulk_arr.append(
+                Invitation(
+                    sender=sender,
+                    room_id=room_id,
+                    receiver_id=receiver_id,
+                )
+            )
+        result = Invitation.objects.bulk_create(bulk_arr)
+        # 대충 첫번째꺼만 리턴
+        return result[:1]
+
+
 class MyFriendSerializer(serializers.ModelSerializer):
     friend_nickname = serializers.ReadOnlyField(
         source="friend.nickname", allow_null=True
@@ -61,5 +90,5 @@ class MyFriendSerializer(serializers.ModelSerializer):
     friend_email = serializers.ReadOnlyField(source="friend.username", allow_null=True)
 
     class Meta:
-        model = MyFriend
         fields = "__all__"
+        model = MyFriend
