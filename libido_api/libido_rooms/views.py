@@ -193,7 +193,7 @@ class UserRoomViewSet(viewsets.ModelViewSet):
         detail=True,
         permission_classes=[TokenHasReadWriteScope],
     )
-    def join(self, request, *args, **kwargs):
+    def leave(self, request, *args, **kwargs):
         user_id = request.user.id
         room_id = kwargs["pk"]
         room = Room.leave(room_id=room_id, user_id=user_id)
