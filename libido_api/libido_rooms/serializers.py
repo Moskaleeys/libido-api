@@ -5,7 +5,8 @@ from django.db import transaction
 from rest_framework import serializers
 from django.contrib.auth.models import AnonymousUser
 from libido_commons import exceptions
-from libido_rooms.models import Room, Category, RoomCategory
+from libido_users.serializers import UserSerializer
+from libido_rooms.models import Room, Category, RoomCategory, RoomUser
 from libido_contents.models import Content
 from libido_contents.serializers import ContentSerializer
 
@@ -19,6 +20,7 @@ class CategorySerializer(serializers.ModelSerializer):
 class RoomSerializer(serializers.ModelSerializer):
     category = CategorySerializer(many=True, allow_null=True)
     contents = ContentSerializer(many=True, allow_null=True)
+    users = UserSerializer(many=True, allow_null=True)
 
     class Meta:
         model = Room

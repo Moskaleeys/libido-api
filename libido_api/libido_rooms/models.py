@@ -124,6 +124,13 @@ class Room(PrintableModel):
         help_text="룸 카테고리들",
     )
 
+    users = models.ManyToManyField(
+        get_user_model(),
+        through="libido_rooms.RoomUser",
+        blank=True,
+        help_text="룸 참여자들",
+    )
+
     contents = models.ManyToManyField(
         "libido_contents.Content",
         through="libido_rooms.RoomContent",
