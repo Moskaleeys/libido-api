@@ -145,6 +145,15 @@ class Room(PrintableModel):
         return f"{self.title}"
 
     @classmethod
+    def join(cls, room_id, user_id, password):
+        room = cls.get_room(pk=room_id)
+        room.check_password(pw=password)
+
+        room_user = RoomUser.objects.create(user_id=user_id, room_id=room_id)
+
+        return room_user
+
+    @classmethod
     def get_room(cls, pk):
         try:
             return cls.objects.get(id=pk)
@@ -162,17 +171,57 @@ class Room(PrintableModel):
         if self.password is None:
             return True
 
-        passwd = f"{pw}".encode()
-        if bcrypt.checkpw(passwd, self.password.encode()):
-            return True
-        else:
-            return False
+        try:
+            passwd = f"{pw}".encode()
+            if bcrypt.checkpw(passwd, self.password.encode()):
+                return True
+            else:
+                raise exceptions.InvalidRoomPasswordError
+        except ValueError as e:
+            print(e)
+            raise exceptions.InvalidRoomPasswordError
 
     class Meta:
         verbose_name = "방"
         verbose_name_plural = "방 모음"
         db_table = "room"
         managed = True
+
+
+class RoomUser(PrintableModel):
+    user = models.ForeignKey(
+        get_user_model(),
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        db_index=True,
+        related_name="roomuser_user",
+        help_text="참여자",
+    )
+
+    room = models.ForeignKey(
+        "libido_rooms.Room",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="roomuser_room",
+        help_text="스트리밍 방",
+    )
+
+    created_at = models.DateTimeField(db_index=True, default=timezone.now)
+
+    def __str__(self):
+        return f"{self.id} {self.user} {self.room}"
+
+    class Meta:
+        verbose_name = "방 참여자"
+        verbose_name_plural = "방 참여자 모음"
+        db_table = "room_user"
+        managed = True
+
+        constraints = [
+            models.UniqueConstraint(fields=["user", "room"], name="unique_room_user")
+        ]
 
 
 class RoomCategory(PrintableModel):

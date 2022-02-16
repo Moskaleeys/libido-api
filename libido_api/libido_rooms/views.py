@@ -65,6 +65,7 @@ class RoomViewSet(
 class UserRoomViewSet(viewsets.ModelViewSet):
     __basic_fields = ("id", "moderator", "title")
     parent = UserViewSet
+    renderer_classes = [renderers.LibidoApiJSONRenderer]
     parent_object = User
     parent_lookup_field = "user"
     permission_classes = [
@@ -139,3 +140,35 @@ class UserRoomViewSet(viewsets.ModelViewSet):
         room = Room.get_room(pk=kwargs["pk"])
         result = room.check_password(pw=password)
         return Response({"result": result}, status=status.HTTP_200_OK)
+
+    @swagger_auto_schema(
+        method="post",
+        operation_summary="방참여",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                "password": openapi.Schema(
+                    type=openapi.TYPE_STRING, description="방 비밀번호"
+                ),
+                "room_id": openapi.Schema(type=openapi.TYPE_STRING, description="방 PK"),
+            },
+        ),
+        responses={
+            status.HTTP_200_OK: openapi.Schema(
+                type=openapi.TYPE_OBJECT,
+                properties={"result": openapi.Schema(type=openapi.TYPE_OBJECT)},
+            ),
+        },
+    )
+    @action(
+        methods=["POST"],
+        detail=False,
+        permission_classes=[TokenHasReadWriteScope],
+    )
+    def join(self, request, *args, **kwargs):
+        user_id = request.user.id
+        password = request.data.get("password", None)
+        room_id = request.data.get("room_id", None)
+        room = Room.join(room_id=room_id, password=password, user_id=user_id)
+        serializer = RoomSerializer(instance=room)
+        return Response(serializer.data, status=status.HTTP_200_OK)

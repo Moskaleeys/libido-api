@@ -46,6 +46,12 @@ class LibidoApiException(APIException):
         )
 
 
+class InvalidRoomPasswordError(LibidoApiException):
+    error_code = 13
+    status_code = 400
+    default_detail = "InvalidRoomPasswordError"
+
+
 class InvalidEmailAddressError(LibidoApiException):
     error_code = 14
     status_code = 400
