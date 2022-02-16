@@ -71,12 +71,26 @@ class Category(PrintableModel):
         managed = True
 
 
+class ThingPlatForm(models.IntegerChoices):
+    YOUTUBE = 1, "유투브"
+    NETFLIX = 2, "넷플릭스"
+    PUBLIC = 3, "공중파 "
+
+
 class Room(PrintableModel):
     id = models.CharField(
         db_index=True,
         max_length=45,
         default=_generate_random_token,
         primary_key=True,
+    )
+
+    platform = models.IntegerField(
+        choices=ThingPlatForm.choices,
+        default=ThingPlatForm.YOUTUBE,
+        null=True,
+        blank=True,
+        help_text="영상 플랫폼",
     )
 
     moderator = models.ForeignKey(
