@@ -185,6 +185,7 @@ class UserViewSet(DeleteMixin, BaseViewSet):
 
     @swagger_auto_schema(
         method="post",
+        operation_summary="등록한 핸드폰번호 확인",
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             properties={
@@ -219,6 +220,7 @@ class UserViewSet(DeleteMixin, BaseViewSet):
 
     @swagger_auto_schema(
         method="post",
+        operation_summary="회원탈퇴",
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             properties={},
@@ -307,6 +309,7 @@ class MyFriendViewSet(BaseViewSet):
 
     @swagger_auto_schema(
         method="post",
+        operation_summary="친구요청 수락",
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             properties={
@@ -332,6 +335,7 @@ class MyFriendViewSet(BaseViewSet):
 
     @swagger_auto_schema(
         method="post",
+        operation_summary="친구요청 신청",
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             properties={
@@ -357,6 +361,7 @@ class MyFriendViewSet(BaseViewSet):
 
     @swagger_auto_schema(
         method="post",
+        operation_summary="친구요청 랜덤친구 찾기",
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             properties={},
@@ -377,6 +382,7 @@ class MyFriendViewSet(BaseViewSet):
 
     @swagger_auto_schema(
         method="post",
+        operation_summary="친구삭제",
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             properties={

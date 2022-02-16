@@ -104,6 +104,7 @@ class UserRoomViewSet(viewsets.ModelViewSet):
             return RoomSerializer
 
     @swagger_auto_schema(
+        operation_summary="방 만들기",
         request_body=RegisterRoomSerializer,
         responses={201: RoomSerializer},
     )
@@ -115,6 +116,7 @@ class UserRoomViewSet(viewsets.ModelViewSet):
 
     @swagger_auto_schema(
         method="post",
+        operation_summary="방 비밀번호 확인",
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             properties={
