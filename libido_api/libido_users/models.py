@@ -436,6 +436,18 @@ class User(AbstractUser, PrintableModel):
     def check_userid(cls, userid):
         return cls.objects.filter(userid=userid).exists()
 
+    @property
+    def play_hours(self):
+        return 3
+
+    @property
+    def friend_count(self):
+        return self.myfriend_user.filter(is_approved=True).count()
+
+    @property
+    def genre(self):
+        return "romance"
+
     def __str__(self):
 
         return f"{self.username} {self.nickname}"

@@ -11,6 +11,9 @@ from libido_users.models import User, MyFriend, Invitation
 class UserSerializer(serializers.ModelSerializer):
     is_social_login = serializers.ReadOnlyField()
     social_login_provider = serializers.ReadOnlyField()
+    play_hours = serializers.ReadOnlyField(allow_null=True)
+    friend_count = serializers.ReadOnlyField(allow_null=True)
+    genre = serializers.ReadOnlyField(allow_null=True)
 
     class Meta:
         model = User

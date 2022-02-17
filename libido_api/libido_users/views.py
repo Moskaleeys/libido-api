@@ -409,3 +409,28 @@ class MyFriendViewSet(BaseViewSet):
         user_id = request.user.id
         MyFriend.disconnect(user_id=user_id, friend_id=friend_id)
         return Response(None, status=status.HTTP_204_NO_CONTENT)
+
+    @swagger_auto_schema(
+        method="post",
+        operation_summary="친구의 스트리밍방",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                "friend_id": openapi.Schema(
+                    type=openapi.TYPE_INTEGER, description="친구 유저 PK"
+                ),
+            },
+        ),
+        responses={status.HTTP_200_OK: MyFriendSerializer},
+    )
+    @action(
+        methods=["POST"],
+        detail=False,
+        url_path="rooms",
+        permission_classes=[TokenHasReadWriteScope],
+    )
+    def rooms(self, request, *args, **kwargs):
+        friend_id = request.data["friend_id"]
+        user_id = request.user.id
+        # MyFriend.disconnect(user_id=user_id, friend_id=friend_id)
+        return Response(None, status=status.HTTP_204_NO_CONTENT)
