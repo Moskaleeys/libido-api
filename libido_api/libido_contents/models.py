@@ -74,7 +74,7 @@ class Genre(PrintableModel):
 
 class Content(PrintableModel):
     title = models.CharField(max_length=100, blank=True, null=True)
-    url = models.URLField(max_length=550, blank=True, null=True, unique=True)
+    url = models.URLField(max_length=254, blank=True, null=True, unique=True)
     description = models.TextField(null=True, blank=True, help_text="방 설명")
     thumb_url = models.URLField(max_length=500, blank=True, null=True)
     channel_id = models.CharField(max_length=50, null=True, blank=True)
@@ -156,3 +156,27 @@ class ContentGenre(PrintableModel):
                 fields=["content", "genre"], name="unique_content_genre"
             )
         ]
+
+
+class UserContentHistory(PrintableModel):
+    minute = models.PositiveIntegerField(
+        null=True, default=0, blank=True, help_text="시청 분"
+    )
+    genre = models.CharField(max_length=20, blank=True, null=True, help_text="장르")
+
+    content = models.ForeignKey(
+        "libido_contents.Content",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="usercontenthistoy_content",
+        help_text="콘텐츠",
+    )
+
+    created_at = models.DateTimeField(db_index=True, default=timezone.now)
+
+    class Meta:
+        verbose_name = "사용자 콘텐츠 시청기록"
+        verbose_name_plural = "사용자 콘텐츠 시청기록 모음"
+        db_table = "user_content_history"
+        managed = True

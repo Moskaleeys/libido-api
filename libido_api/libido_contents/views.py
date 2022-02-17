@@ -26,7 +26,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
 from libido_users.views import UserViewSet
 from libido_users.models import User
-from libido_contents.models import Content
+from libido_contents.models import Content, UserContentHistory
 from libido_contents.serializers import ContentSerializer
 
 
@@ -54,3 +54,41 @@ class ContentViewSet(
     filter_fields = __basic_fields
     search_fields = __basic_fields
     ordering_fields = __basic_fields
+
+    @swagger_auto_schema(
+        method="post",
+        operation_summary="플레이 타임 기록",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                "minutes": openapi.Schema(
+                    type=openapi.TYPE_INTEGER, description="시청 분"
+                ),
+                "content_id": openapi.Schema(
+                    type=openapi.TYPE_INTEGER, description="콘텐츠 아이디"
+                ),
+                "genre": openapi.Schema(type=openapi.TYPE_STRING, description="장르"),
+            },
+        ),
+        responses={
+            status.HTTP_200_OK: openapi.Schema(
+                type=openapi.TYPE_OBJECT,
+                properties={"result": openapi.Schema(type=openapi.TYPE_OBJECT)},
+            ),
+        },
+    )
+    @action(
+        methods=["POST"],
+        detail=True,
+        permission_classes=[TokenHasReadWriteScope],
+    )
+    def create_history(self, request, *args, **kwargs):
+        minute = request.data.get("minute", None)
+        content_id = request.data.get("content_id", None)
+        genre = request.data.get("genre", None)
+        UserContentHistory.objects.create(
+            minute=minute,
+            content_id=content_id,
+            genre=genre,
+        )
+        return Response({"result": "success"}, status=status.HTTP_200_OK)
