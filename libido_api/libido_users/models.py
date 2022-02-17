@@ -437,6 +437,10 @@ class User(AbstractUser, PrintableModel):
         return cls.objects.filter(userid=userid).exists()
 
     @property
+    def created_room_count(self):
+        return self.room_moderator.count()
+
+    @property
     def play_hours(self):
         return 3
 
