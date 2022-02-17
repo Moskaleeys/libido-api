@@ -43,7 +43,7 @@ class ContentViewSet(
         permissions.AllowRetriveList,
     ]
     renderer_classes = [renderers.LibidoApiJSONRenderer]
-    queryset = Content.objects.all().exclude(deleted_at__isnull=False).order_by("-id")
+    queryset = Content.objects.all().exclude(deleted_at__isnull=False).order_by("?")
     serializer_class = ContentSerializer
     pagination_class = CommonPagination
     filter_backends = (
@@ -53,3 +53,4 @@ class ContentViewSet(
     )
     filter_fields = __basic_fields
     search_fields = __basic_fields
+    ordering_fields = __basic_fields

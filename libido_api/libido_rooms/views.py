@@ -50,7 +50,7 @@ class RoomViewSet(
         permissions.AllowRetriveList,
     ]
     renderer_classes = [renderers.LibidoApiJSONRenderer]
-    queryset = Room.objects.all().exclude(deleted_at__isnull=False).order_by("-id")
+    queryset = Room.objects.all().exclude(deleted_at__isnull=False).order_by("?")
     serializer_class = RoomSerializer
     pagination_class = CommonPagination
     filter_backends = (
@@ -60,6 +60,7 @@ class RoomViewSet(
     )
     filter_fields = __basic_fields
     search_fields = __basic_fields
+    ordering_fields = __basic_fields
 
 
 class UserRoomViewSet(viewsets.ModelViewSet):
