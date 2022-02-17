@@ -9,6 +9,7 @@ from oauth2_provider.contrib.rest_framework import (
     TokenMatchesOASRequirements,
 )
 from libido_commons import permissions
+from libido_commons.filters import MinMaxRoomFilter
 
 from rest_framework.decorators import action
 from drf_yasg.utils import swagger_auto_schema
@@ -45,6 +46,10 @@ class RoomViewSet(
         "moderator__username",
         "moderator__email",
         "moderator__id",
+        "min_user_count",
+        "max_user_count",
+        "min_play_lists_count",
+        "max_play_lists_count",
     )
     permission_classes = [
         permissions.AllowRetriveList,
@@ -58,6 +63,7 @@ class RoomViewSet(
         SearchFilter,
         OrderingFilter,
     )
+    filterset_class = MinMaxRoomFilter
     filter_fields = __basic_fields
     search_fields = __basic_fields
     ordering_fields = __basic_fields
