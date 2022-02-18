@@ -394,6 +394,10 @@ class User(AbstractUser, PrintableModel):
 
     objects = UserManager()
 
+    @property
+    def invitations(self):
+        return self.invitation_receiver.filter(is_approved=False)
+
     @classmethod
     def is_exists(cls, username):
         return User.objects.filter(username=username).exists()

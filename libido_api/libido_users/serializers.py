@@ -32,6 +32,12 @@ class UserSerializer(serializers.ModelSerializer):
         return make_password(value, salt=bcrypt.gensalt(11), hasher=hasher)
 
 
+class UserLightSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["id", "username", "thumb", "nickname"]
+
+
 class RegisterSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
     username = serializers.CharField(label="이메일(유저네임)")
@@ -104,3 +110,12 @@ class MyFriendSerializer(serializers.ModelSerializer):
     class Meta:
         fields = "__all__"
         model = MyFriend
+
+
+class InvitationSerializer(serializers.ModelSerializer):
+    sender = UserLightSerializer(allow_null=True)
+    receiver = UserLightSerializer(allow_null=True)
+
+    class Meta:
+        fields = "__all__"
+        model = Invitation

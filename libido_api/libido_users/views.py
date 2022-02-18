@@ -23,6 +23,7 @@ from libido_users.models import User, MyFriend, EmailAuth
 from libido_users.serializers import (
     RegisterSerializer,
     SendInvitationSerializer,
+    InvitationSerializer,
     UserSerializer,
     MyFriendSerializer,
 )
@@ -110,6 +111,24 @@ class UserViewSet(DeleteMixin, BaseViewSet):
             "friends": user.friend_count,
         }
         return Response(result, status=status.HTTP_200_OK)
+
+    @swagger_auto_schema(
+        method="post",
+        operation_summary="초대장들",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={},
+        ),
+    )
+    @action(
+        methods=["POST"], detail=False, url_path="invitations", permission_classes=[]
+    )
+    def invitations(self, request):
+        user = request.user
+        serializer = InvitationSerializer(
+            instance=user.invitations, many=True, allow_null=True
+        )
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
         method="post",
