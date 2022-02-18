@@ -64,6 +64,9 @@ class ContentViewSet(
                 "minutes": openapi.Schema(
                     type=openapi.TYPE_INTEGER, description="시청 분"
                 ),
+                "user_id": openapi.Schema(
+                    type=openapi.TYPE_INTEGER, description="유저 아이디"
+                ),
                 "content_id": openapi.Schema(
                     type=openapi.TYPE_INTEGER, description="콘텐츠 아이디"
                 ),
@@ -84,9 +87,11 @@ class ContentViewSet(
     )
     def create_history(self, request, *args, **kwargs):
         minute = request.data.get("minute", None)
+        user_id = request.data.get("user_id", None)
         content_id = request.data.get("content_id", None)
         genre = request.data.get("genre", None)
         UserContentHistory.objects.create(
+            user_id=user_id,
             minute=minute,
             content_id=content_id,
             genre=genre,

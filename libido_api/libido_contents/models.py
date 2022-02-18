@@ -159,6 +159,16 @@ class ContentGenre(PrintableModel):
 
 
 class UserContentHistory(PrintableModel):
+    user = models.ForeignKey(
+        get_user_model(),
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        db_index=True,
+        related_name="usercontenthistory_user",
+        help_text="유저",
+    )
+
     minute = models.PositiveIntegerField(
         null=True, default=0, blank=True, help_text="시청 분"
     )
