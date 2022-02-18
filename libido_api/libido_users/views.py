@@ -26,6 +26,7 @@ from libido_users.serializers import (
     InvitationSerializer,
     UserSerializer,
     MyFriendSerializer,
+    FriendRequestSerializer,
 )
 
 
@@ -114,7 +115,7 @@ class UserViewSet(DeleteMixin, BaseViewSet):
 
     @swagger_auto_schema(
         method="post",
-        operation_summary="초대장들",
+        operation_summary="내가 받은 초대장들",
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             properties={},
@@ -127,6 +128,27 @@ class UserViewSet(DeleteMixin, BaseViewSet):
         user = request.user
         serializer = InvitationSerializer(
             instance=user.invitations, many=True, allow_null=True
+        )
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @swagger_auto_schema(
+        method="post",
+        operation_summary="내가 받은 친구초대들",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={},
+        ),
+    )
+    @action(
+        methods=["POST"],
+        detail=False,
+        url_path="friend_requests",
+        permission_classes=[],
+    )
+    def friend_requests(self, request):
+        user = request.user
+        serializer = FriendRequestSerializer(
+            instance=user.friend_requests, many=True, allow_null=True
         )
         return Response(serializer.data, status=status.HTTP_200_OK)
 

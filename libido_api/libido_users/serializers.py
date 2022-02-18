@@ -98,6 +98,14 @@ class SendInvitationSerializer(serializers.Serializer):
         return result[:1]
 
 
+class FriendRequestSerializer(serializers.ModelSerializer):
+    request_user = UserLightSerializer(source="user", allow_null=True)
+
+    class Meta:
+        fields = "__all__"
+        model = MyFriend
+
+
 class MyFriendSerializer(serializers.ModelSerializer):
     friend_nickname = serializers.ReadOnlyField(
         source="friend.nickname", allow_null=True

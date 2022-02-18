@@ -457,6 +457,10 @@ class User(AbstractUser, PrintableModel):
         return 3
 
     @property
+    def friend_requests(self):
+        return self.myfriend_friend.filter(is_approved=False)
+
+    @property
     def friend_ids(self):
         return self.myfriend_user.filter(is_approved=True).values_list(
             "friend", flat=True
