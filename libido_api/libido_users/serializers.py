@@ -107,13 +107,8 @@ class FriendRequestSerializer(serializers.ModelSerializer):
 
 
 class MyFriendSerializer(serializers.ModelSerializer):
-    friend_nickname = serializers.ReadOnlyField(
-        source="friend.nickname", allow_null=True
-    )
-    friend_thumb_url = serializers.ReadOnlyField(
-        source="friend.thumb_url", allow_null=True
-    )
-    friend_email = serializers.ReadOnlyField(source="friend.username", allow_null=True)
+    user = UserLightSerializer(allow_null=True)
+    friend = UserLightSerializer(allow_null=True)
 
     class Meta:
         fields = "__all__"

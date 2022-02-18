@@ -543,6 +543,19 @@ class MyFriend(PrintableModel):
             return False
 
     @classmethod
+    def decline(cls, user_id, friend_id):
+        try:
+            myfriend = cls.objects.filter(
+                user_id=user_id,
+                friend_id=friend_id,
+            )
+            myfriend.delete()
+            return myfriend
+
+        except Exception:
+            return False
+
+    @classmethod
     def connect(cls, user_id, friend_id):
         # exception 및 예외처리 구현 필요
         myfriend, flag = cls.objects.get_or_create(
@@ -703,6 +716,19 @@ class Invitation(PrintableModel):
     deleted_at = models.DateTimeField(
         null=True, blank=True, db_index=True, default=None
     )
+
+    @classmethod
+    def decline(cls, sender_id, receiver_id):
+        try:
+            invitation = cls.objects.filter(
+                sender=sender_id,
+                receiver_id=receiver_id,
+            )
+            invitation.delete()
+            return invitation
+
+        except Exception:
+            return False
 
     class Meta:
         verbose_name = "초대장"

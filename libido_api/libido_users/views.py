@@ -19,7 +19,7 @@ from libido_commons import renderers
 from libido_commons.mixins import DeleteMixin
 from libido_commons.paginations import CommonPagination
 from libido_commons.permissions import NoCreate, NoDelete, NoRetrive
-from libido_users.models import User, MyFriend, EmailAuth
+from libido_users.models import User, MyFriend, EmailAuth, Invitation
 from libido_users.serializers import (
     RegisterSerializer,
     SendInvitationSerializer,
@@ -356,7 +356,7 @@ class MyFriendViewSet(BaseViewSet):
             return MyFriendSerializer
 
     @swagger_auto_schema(
-        operation_summary="초대장 발송",
+        operation_summary="스트리밍 초대장 발송",
         request_body=SendInvitationSerializer,
         # responses={201: RoomSerializer},
     )
@@ -371,6 +371,31 @@ class MyFriendViewSet(BaseViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @swagger_auto_schema(
+        method="post",
+        operation_summary="초대장 거절 ",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                "sender_id": openapi.Schema(
+                    type=openapi.TYPE_INTEGER, description="보낸사람 유저 아이디"
+                ),
+            },
+        ),
+        responses={status.HTTP_200_OK: MyFriendSerializer},
+    )
+    @action(
+        methods=["POST"],
+        detail=False,
+        url_path="decline_invitation",
+        permission_classes=[TokenHasReadWriteScope],
+    )
+    def decline_invitation(self, request, *args, **kwargs):
+        user = request.user
+        sender_id = request.data["sender_id"]
+        Invitation.decline(sender_id=sender_id, receiver_id=user.id)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
     @swagger_auto_schema(
         method="post",
@@ -397,6 +422,32 @@ class MyFriendViewSet(BaseViewSet):
         friend = MyFriend.approve(user_id=user_id, friend_id=friend_id)
         serializers = MyFriendSerializer(instance=friend, allow_null=True)
         return Response(serializers.data, status=status.HTTP_200_OK)
+
+    @swagger_auto_schema(
+        method="post",
+        operation_summary="친구요청 거절 ",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                "friend_id": openapi.Schema(
+                    type=openapi.TYPE_INTEGER, description="친구요청 거절 friend_id"
+                ),
+            },
+        ),
+        responses={status.HTTP_200_OK: MyFriendSerializer},
+    )
+    @action(
+        methods=["POST"],
+        detail=False,
+        url_path="decline",
+        permission_classes=[TokenHasReadWriteScope],
+    )
+    def decline(self, request, *args, **kwargs):
+        friend_id = request.data["friend_id"]
+        user_id = request.user.id
+        friend = MyFriend.decline(user_id=user_id, friend_id=friend_id)
+        serializers = MyFriendSerializer(instance=friend, allow_null=True)
+        return Response(serializers.data, status=status.HTTP_204_NO_CONTENT)
 
     @swagger_auto_schema(
         method="post",
