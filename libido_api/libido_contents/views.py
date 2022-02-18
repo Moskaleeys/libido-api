@@ -82,7 +82,7 @@ class ContentViewSet(
     )
     @action(
         methods=["POST"],
-        detail=True,
+        detail=False,
         permission_classes=[TokenHasReadWriteScope],
     )
     def create_history(self, request, *args, **kwargs):
