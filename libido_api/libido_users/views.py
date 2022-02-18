@@ -181,7 +181,7 @@ class UserViewSet(DeleteMixin, BaseViewSet):
 
         except Exception as e:
             print(e)
-            return Response({"data": e.args[0]}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"data": e}, status=status.HTTP_400_BAD_REQUEST)
 
     @swagger_auto_schema(
         method="post",
