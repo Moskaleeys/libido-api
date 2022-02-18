@@ -64,9 +64,6 @@ class ContentViewSet(
                 "minutes": openapi.Schema(
                     type=openapi.TYPE_INTEGER, description="시청 분"
                 ),
-                "user_id": openapi.Schema(
-                    type=openapi.TYPE_INTEGER, description="유저 아이디"
-                ),
                 "content_id": openapi.Schema(
                     type=openapi.TYPE_INTEGER, description="콘텐츠 아이디"
                 ),
