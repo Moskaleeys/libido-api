@@ -69,6 +69,54 @@ class RoomViewSet(
     ordering_fields = __basic_fields
 
 
+class FriendsRoomViewSet(
+    mixins.ListModelMixin,  # retrive open -> user_id retrive
+    mixins.RetrieveModelMixin,  # retrive open -> user_id retrive
+    viewsets.GenericViewSet,
+):
+    __basic_fields = (
+        "id",
+        "title",
+        "description",
+        "category__name",
+        "play_lists_count",
+        "moderator__username",
+        "moderator__email",
+        "moderator__id",
+        "min_user_count",
+        "max_user_count",
+        "min_play_lists_count",
+        "max_play_lists_count",
+    )
+    permission_classes = [
+        TokenHasReadWriteScope,
+        permissions.AllowRetriveList,
+    ]
+    renderer_classes = [renderers.LibidoApiJSONRenderer]
+    queryset = Room.objects.all().exclude(deleted_at__isnull=False).order_by("?")
+    serializer_class = RoomSerializer
+    pagination_class = CommonPagination
+    filter_backends = (
+        DjangoFilterBackend,
+        SearchFilter,
+        OrderingFilter,
+    )
+    filterset_class = MinMaxRoomFilter
+    filter_fields = __basic_fields
+    search_fields = __basic_fields
+    ordering_fields = __basic_fields
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        user = self.request.user
+        qs = (
+            queryset.select_related("moderator")
+            .filter(moderator__id__in=[user.friend_ids])
+            .order_by("-id")
+        )
+        return qs
+
+
 class UserRoomViewSet(viewsets.ModelViewSet):
     __basic_fields = ("id", "moderator", "title")
     parent = UserViewSet

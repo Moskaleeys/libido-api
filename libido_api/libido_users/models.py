@@ -445,6 +445,20 @@ class User(AbstractUser, PrintableModel):
         return 3
 
     @property
+    def play_minutes(self):
+        return 3
+
+    @property
+    def room_cnt(self):
+        return 3
+
+    @property
+    def friend_ids(self):
+        return self.myfriend_user.filter(is_approved=True).values_list(
+            "friend", flat=True
+        )
+
+    @property
     def friend_count(self):
         return self.myfriend_user.filter(is_approved=True).count()
 

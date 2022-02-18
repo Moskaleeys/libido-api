@@ -94,6 +94,25 @@ class UserViewSet(DeleteMixin, BaseViewSet):
 
     @swagger_auto_schema(
         method="post",
+        operation_summary="유저 통계",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={},
+        ),
+    )
+    @action(methods=["POST"], detail=False, url_path="stats", permission_classes=[])
+    def stats(self, request):
+        user = request.user
+        result = {
+            "play_time": user.play_minutes,
+            "room_cnt": user.room_cnt,
+            "genre": user.genre,
+            "friends": user.friend_count,
+        }
+        return Response(result, status=status.HTTP_200_OK)
+
+    @swagger_auto_schema(
+        method="post",
         operation_summary="닉네임 중복 검사",
         operation_description="닉네임 중복검사 엔드포인트",
         request_body=openapi.Schema(
@@ -412,7 +431,7 @@ class MyFriendViewSet(BaseViewSet):
 
     @swagger_auto_schema(
         method="post",
-        operation_summary="친구의 스트리밍방",
+        operation_summary="단일 친구의 스트리밍방",
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             properties={
@@ -430,7 +449,10 @@ class MyFriendViewSet(BaseViewSet):
         permission_classes=[TokenHasReadWriteScope],
     )
     def rooms(self, request, *args, **kwargs):
+        from libido_rooms.models import Room
+        from libido_rooms.serializers import RoomSerializer
+
         friend_id = request.data["friend_id"]
-        user_id = request.user.id
-        # MyFriend.disconnect(user_id=user_id, friend_id=friend_id)
-        return Response(None, status=status.HTTP_204_NO_CONTENT)
+        rooms = Room.objects.filter(moderator_id=friend_id)
+        serializers = RoomSerializer(instance=rooms, many=True, allow_null=True)
+        return Response(serializers.data, status=status.HTTP_200_OK)

@@ -8,6 +8,15 @@ from social_django.models import UserSocialAuth
 from libido_users.models import User, MyFriend, Invitation
 
 
+class UserStatSerializer(serializers.Serializer):
+    play_time = serializers.ReadOnlyField(source="play_time", allow_null=True)
+    create_room_cnt = serializers.ReadOnlyField(
+        source="create_room_cnt", allow_null=True
+    )
+    genre = serializers.ReadOnlyField(source="genre", allow_null=True)
+    friend_cnt = serializers.ReadOnlyField(source="friend_cnt", allow_null=True)
+
+
 class UserSerializer(serializers.ModelSerializer):
     is_social_login = serializers.ReadOnlyField()
     social_login_provider = serializers.ReadOnlyField()
