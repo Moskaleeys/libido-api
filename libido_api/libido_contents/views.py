@@ -86,8 +86,8 @@ class ContentViewSet(
         permission_classes=[TokenHasReadWriteScope],
     )
     def create_history(self, request, *args, **kwargs):
+        user_id = request.user.id
         minute = request.data.get("minute", None)
-        user_id = request.data.get("user_id", None)
         content_id = request.data.get("content_id", None)
         genre = request.data.get("genre", None)
         UserContentHistory.objects.create(
