@@ -6,6 +6,7 @@ from libido_commons.models import PrintableModel
 
 class Message(PrintableModel):
     nickname = models.CharField(max_length=50)
+    username = models.CharField(max_length=50)
     user = models.ForeignKey(
         get_user_model(),
         verbose_name="사용자",

@@ -78,27 +78,41 @@ class ChatConsumer(AsyncWebsocketConsumer):
         data = json.loads(text_data)
         message = data["message"]
         nickname = data["nickname"]
+        username = data.get("username", "empty")
         room_id = data["room"]
 
         request_logger.info(
-            {"message": message, "nickname": nickname, "type": "chat_message"}
+            {
+                "message": message,
+                "nickname": nickname,
+                "type": "chat_message",
+                "username": username,
+            }
         )
         await self.save_message(nickname=nickname, room_id=room_id, message=message)
 
         # Send message to room group
         await self.channel_layer.group_send(
             self.room_group_name,
-            {"type": "chat_message", "message": message, "nickname": nickname},
+            {
+                "type": "chat_message",
+                "message": message,
+                "nickname": nickname,
+                "username": username,
+            },
         )
 
     # Receive message from room group
     async def chat_message(self, event):
         message = event["message"]
         nickname = event["nickname"]
+        username = event.get("username", "empty")
 
         # Send message to WebSocket
         await self.send(
-            text_data=json.dumps({"message": message, "nickname": nickname})
+            text_data=json.dumps(
+                {"message": message, "nickname": nickname, "username": username}
+            )
         )
 
     @sync_to_async
@@ -113,5 +127,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             raise exceptions.RoomDoesNotExists
 
     @sync_to_async
-    def save_message(self, nickname, room_id, message):
-        Message.objects.create(nickname=nickname, room_id=room_id, content=message)
+    def save_message(self, nickname, room_id, message, username="empty"):
+        Message.objects.create(
+            nickname=nickname, room_id=room_id, content=message, username=username
+        )
