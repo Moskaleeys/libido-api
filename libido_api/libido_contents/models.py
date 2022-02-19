@@ -51,6 +51,7 @@ def upload_thumb(instance, filename):
 
 
 class Genre(PrintableModel):
+    idx = models.PositiveIntegerField(null=True, blank=True, help_text="(유투브전용) 인덱스")
     name = models.CharField(
         db_index=True,
         max_length=50,
