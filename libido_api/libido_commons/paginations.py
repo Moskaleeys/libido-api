@@ -15,6 +15,6 @@ class SearchPagination(PageNumberPagination):
 
 
 class CommonCursorPagination(CursorPagination):
-    page_size = 20
+    page_size = 25
     max_page_size = 100
     ordering = "id"

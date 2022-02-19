@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "rest_framework_social_oauth2",
     "libido_rooms",
     "libido_contents",
+    "libido_chats",
     "libido_users",
     "libido_auths",
     "libido_services",

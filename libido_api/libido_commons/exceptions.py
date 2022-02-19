@@ -46,6 +46,12 @@ class LibidoApiException(APIException):
         )
 
 
+class RoomDoesNotExists(LibidoApiException):
+    error_code = 11
+    status_code = 400
+    default_detail = "RoomDoesNotExists"
+
+
 class LeaveRoomFailError(LibidoApiException):
     error_code = 12
     status_code = 400
