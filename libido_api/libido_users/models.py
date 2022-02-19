@@ -1,4 +1,6 @@
 from django.db import models
+import smtplib
+from email.mime.text import MIMEText
 import datetime
 from datetime import timedelta
 from enum import IntEnum
@@ -624,7 +626,8 @@ class EmailAuth(PrintableModel):
             )
 
             # email
-            cls.send_email_message(key=auth_no, email=email)
+            # cls.send_email_message(key=auth_no, email=email)
+            cls.send_email_message_v0(key=auth_no, email=email)
 
             return email_auth
 
@@ -635,6 +638,27 @@ class EmailAuth(PrintableModel):
         except ValidationError as e:
             print(e)
             raise exceptions.InvalidEmailAddressError
+
+    @classmethod
+    def send_email_message_v0(cls, key, email):
+        smtp = smtplib.SMTP(settings.EMAIL_HOST, settings.EMAIL_PORT)
+        smtp.starttls()
+        smtp.login(settings.EMAIL_HOST_USER, settings.EMAIL_HOST_PASSWORD)
+
+        msg = MIMEText(
+            f""" A 'Find your password' attempt requires further verification 
+        because we did not recognize your device. 
+        To complete the 'Find your password', enter the verification code on your new device
+
+        Verification code: {key}
+        """
+        )
+
+        msg["Subject"] = "Hi"
+
+        smtp.sendmail(settings.EMAIL_HOST_USER, email, msg.as_string())
+        smtp.quit()
+        return True
 
     @classmethod
     def send_email_message(cls, key, email):
