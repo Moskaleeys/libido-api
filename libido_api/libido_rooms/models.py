@@ -152,7 +152,7 @@ class Room(PrintableModel):
         return f"{self.title}"
 
     @classmethod
-    def join(cls, room_id, user_id, password):
+    def join(cls, room_id, user_id, password=None):
         room = cls.get_room(pk=room_id)
         room.check_password(pw=password)
         room_user = RoomUser.objects.create(user_id=user_id, room_id=room_id)
