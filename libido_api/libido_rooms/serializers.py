@@ -31,7 +31,7 @@ class RegisterRoomSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
     title = serializers.CharField(required=True, help_text="타이틀", label="타이틀")
     description = serializers.CharField(required=True, help_text="설명", label="설명")
-    password = serializers.CharField(help_text="비밀번호", label="비밀번호")
+    password = serializers.CharField(help_text="비밀번호", label="비밀번호", required=False)
 
     content_ids = serializers.ListField(
         child=serializers.IntegerField(min_value=0),
@@ -47,10 +47,10 @@ class RegisterRoomSerializer(serializers.Serializer):
             return exceptions.CreateUserLinkError
 
         user = request.user
-        title = validated_data.get("title")
-        description = validated_data.get("description")
-        password = validated_data.get("password")
-        content_ids = validated_data.get("content_ids")
+        title = validated_data.get("title", None)
+        description = validated_data.get("description", None)
+        password = validated_data.get("password", None)
+        content_ids = validated_data.get("content_ids", None)
 
         if password is None:
             is_public = True
