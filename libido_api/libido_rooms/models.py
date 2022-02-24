@@ -154,12 +154,15 @@ class Room(PrintableModel):
     @classmethod
     def join(cls, room_id, user_id, password=None):
         # TODO 트랙젝션존
-        room = cls.get_room(pk=room_id)
-        room.check_password(pw=password)
-        room_user = RoomUser.objects.create(user_id=user_id, room_id=room_id)
-        room.user_count += 1
-        room.save()
-        return room_user
+        try:
+            room = cls.get_room(pk=room_id)
+            room.check_password(pw=password)
+            room_user = RoomUser.objects.create(user_id=user_id, room_id=room_id)
+            room.user_count += 1
+            room.save()
+            return room_user
+        except IntegrityError:
+            raise exceptions.JoinRoomError
 
     @classmethod
     def leave(cls, room_id, user_id):

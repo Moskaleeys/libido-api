@@ -46,6 +46,12 @@ class LibidoApiException(APIException):
         )
 
 
+class JoinRoomError(LibidoApiException):
+    error_code = 10
+    status_code = 400
+    default_detail = "Cannot Join the Room"
+
+
 class RoomDoesNotExists(LibidoApiException):
     error_code = 11
     status_code = 400
