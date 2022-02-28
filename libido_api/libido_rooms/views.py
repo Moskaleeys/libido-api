@@ -65,7 +65,14 @@ class RoomViewSet(
     )
     filterset_class = MinMaxRoomFilter
     filter_fields = __basic_fields
-    search_fields = __basic_fields
+    search_fields = [
+        "id",
+        "title",
+        "description",
+        "category__name",
+        "moderator__email",
+        "moderator__username",
+    ]
     ordering_fields = __basic_fields
 
 
