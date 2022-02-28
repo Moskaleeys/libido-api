@@ -38,7 +38,14 @@ class ContentViewSet(
     mixins.RetrieveModelMixin,  # retrive open -> user_id retrive
     viewsets.GenericViewSet,
 ):
-    __basic_fields = ("id", "title", "description", "url", "channel_title")
+    __basic_fields = (
+        "id",
+        "title",
+        "description",
+        "url",
+        "channel_title",
+        "channel_id",
+    )
     permission_classes = [
         permissions.AllowRetriveList,
     ]
