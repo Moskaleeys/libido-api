@@ -35,6 +35,7 @@ from libido_users.models import User
 class RoomViewSet(
     mixins.ListModelMixin,  # retrive open -> user_id retrive
     mixins.RetrieveModelMixin,  # retrive open -> user_id retrive
+    mixins.UpdateModelMixin,  # retrive open -> user_id retrive
     viewsets.GenericViewSet,
 ):
     __basic_fields = (
