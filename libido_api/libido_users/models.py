@@ -525,8 +525,10 @@ class MyFriend(PrintableModel):
 
     @classmethod
     def randoms(cls, user_id):
-        my_friends = cls.objects.filter(user_id=user_id, is_approved=True).values_list(
-            "friend_id", flat=True
+        my_friends = (
+            cls.objects.filter(Q(user_id=user_id) | Q(friend_id=user_id))
+            .filter(is_approved=True)
+            .values_list("friend_id", flat=True)
         )
         return User.objects.filter(~Q(id__in=[my_friends]))
 
