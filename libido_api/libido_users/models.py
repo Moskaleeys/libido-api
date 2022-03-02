@@ -530,7 +530,7 @@ class MyFriend(PrintableModel):
             .filter(is_approved=True)
             .values_list("friend_id", flat=True)
         )
-        return User.objects.filter(~Q(id__in=[my_friends]))
+        return User.objects.filter(~Q(id__in=[my_friends])).exclude(id=user_id)
 
     @classmethod
     def approve(cls, user_id, friend_id):
