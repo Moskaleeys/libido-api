@@ -404,7 +404,7 @@ class MyFriendViewSet(BaseViewSet):
             type=openapi.TYPE_OBJECT,
             properties={
                 "friend_id": openapi.Schema(
-                    type=openapi.TYPE_INTEGER, description="친구요청 수락할 친구 PK"
+                    type=openapi.TYPE_STRING, description="친구요청 수락할 친구 PK"
                 ),
             },
         ),
@@ -430,7 +430,7 @@ class MyFriendViewSet(BaseViewSet):
             type=openapi.TYPE_OBJECT,
             properties={
                 "friend_id": openapi.Schema(
-                    type=openapi.TYPE_INTEGER, description="친구요청 거절 friend_id"
+                    type=openapi.TYPE_STRING, description="친구요청 거절 friend_id"
                 ),
             },
         ),
@@ -456,7 +456,7 @@ class MyFriendViewSet(BaseViewSet):
             type=openapi.TYPE_OBJECT,
             properties={
                 "friend_id": openapi.Schema(
-                    type=openapi.TYPE_INTEGER, description="친구 맺을 유저 PK"
+                    type=openapi.TYPE_STRING, description="친구 맺을 유저 PK"
                 ),
             },
         ),
@@ -503,7 +503,7 @@ class MyFriendViewSet(BaseViewSet):
             type=openapi.TYPE_OBJECT,
             properties={
                 "friend_id": openapi.Schema(
-                    type=openapi.TYPE_INTEGER, description="친구 삭제할 유저 PK"
+                    type=openapi.TYPE_STRING, description="친구 삭제할 유저 PK"
                 ),
             },
         ),

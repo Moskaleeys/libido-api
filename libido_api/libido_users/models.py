@@ -560,6 +560,9 @@ class MyFriend(PrintableModel):
     @classmethod
     def connect(cls, user_id, friend_id):
         # exception 및 예외처리 구현 필요
+        if user_id == friend_id:
+            raise exceptions.InvalidFriendConenctError
+
         myfriend, flag = cls.objects.get_or_create(
             user_id=user_id,
             friend_id=friend_id,

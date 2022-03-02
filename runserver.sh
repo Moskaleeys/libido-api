@@ -22,7 +22,7 @@ export DATABASE_ENGINE=django.db.backends.mysql \
 # for development
 
 
-cd libido_api && python3 manage.py runserver 8000 --settings=libido_api.settings.development
+cd libido_api && python3 manage.py runserver 8888 --settings=libido_api.settings.development
 
 # cd libido_api && daphne -b 0.0.0.0 -p 8000 --proxy-headers libido_api.asgi:application
 

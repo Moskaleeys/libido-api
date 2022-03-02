@@ -175,46 +175,11 @@ class SmsAuthValidationError(LibidoApiException):
     default_code = 10007
 
 
-class SendCoinMinAmountError(LibidoApiException):
-    error_code = 13000
+class InvalidFriendConenctError(LibidoApiException):
+    error_code = 20000
     status_code = 200
-    default_detail = "SendCoinMinAmountError"
-    default_code = 13000
-
-
-class SendCoinMaxAmountError(LibidoApiException):
-    error_code = 13001
-    status_code = 200
-    default_detail = "SendCoinMaxAmountError"
-    default_code = 13001
-
-
-class KrwDepositMinAmountError(LibidoApiException):
-    error_code = 13002
-    status_code = 200
-    default_detail = "KrwDepositMinAmountError"
-    default_code = 13002
-
-
-class KrwDepositPreviousRequestExists(LibidoApiException):
-    error_code = 13003
-    status_code = 200
-    default_detail = "KrwDepositPreviousRequestExists"
-    default_code = 13003
-
-
-class CreateUserLinkError(LibidoApiException):
-    error_code = 50000
-    status_code = 200
-    default_detail = "CreateUserLinkError"
-    default_code = 50000
-
-
-class CreateBookmarkUserError(LibidoApiException):
-    error_code = 50001
-    status_code = 200
-    default_detail = "CreateBookmarkUserError"
-    default_code = 50001
+    default_detail = "Invalid Friend Connection Error"
+    default_code = 20000
 
 
 # class UserDoesNotExists(LibidoApiException):
