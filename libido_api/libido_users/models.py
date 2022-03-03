@@ -538,9 +538,7 @@ class MyFriend(PrintableModel):
             myfriend = cls.objects.filter(
                 user_id=user_id,
                 friend_id=friend_id,
-            )
-            myfriend.is_approved = True
-            myfriend.save()
+            ).update(is_approved=True)
             return myfriend
 
         except Exception:
