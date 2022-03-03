@@ -346,7 +346,12 @@ class MyFriendViewSet(BaseViewSet):
     def get_queryset(self):
         queryset = super().get_queryset()
         user = self.request.user
-        qs = queryset.select_related("user").filter(user=user).order_by("-id")
+        qs = (
+            queryset.select_related("user")
+            .filter(user=user)
+            .filter(is_approved=True)
+            .order_by("-id")
+        )
         return qs
 
     def get_serializer_class(self):
