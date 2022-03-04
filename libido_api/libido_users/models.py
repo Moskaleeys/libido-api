@@ -533,11 +533,11 @@ class MyFriend(PrintableModel):
         return User.objects.filter(~Q(id__in=[my_friends])).exclude(id=user_id)
 
     @classmethod
-    def approve(cls, user_id, friend_id):
+    def approve(cls, request_friend_id, my_id):
         try:
             myfriend = cls.objects.filter(
-                user_id=user_id,
-                friend_id=friend_id,
+                user_id=request_friend_id,
+                friend_id=my_id,
             ).update(is_approved=True)
             return myfriend
 

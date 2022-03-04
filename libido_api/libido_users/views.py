@@ -422,9 +422,9 @@ class MyFriendViewSet(BaseViewSet):
         permission_classes=[TokenHasReadWriteScope],
     )
     def approve(self, request, *args, **kwargs):
-        friend_id = request.data["friend_id"]
-        user_id = request.user.id
-        friend = MyFriend.approve(user_id=user_id, friend_id=friend_id)
+        request_friend_id = request.data["friend_id"]
+        my_id = request.user.id
+        friend = MyFriend.approve(request_friend_id=request_friend_id, my_id=my_id)
         serializers = MyFriendSerializer(instance=friend, allow_null=True)
         return Response(serializers.data, status=status.HTTP_200_OK)
 
