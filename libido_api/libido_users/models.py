@@ -396,6 +396,19 @@ class User(AbstractUser, PrintableModel):
 
     objects = UserManager()
 
+    @classmethod
+    def get_token(cls, user, app, duration, scope="read write"):
+        uu_id = str(uuid.uuid1().hex)
+        access_token = AccessToken.objects.create(
+            user=user,
+            scope=scope,
+            expires=timezone.now() + timedelta(minutes=duration),
+            token=uu_id,
+            application=app,
+        )
+
+        return access_token.token
+
     @property
     def invitations(self):
         return self.invitation_receiver.filter(is_approved=False)
@@ -407,6 +420,7 @@ class User(AbstractUser, PrintableModel):
     @classmethod
     def tmp_token(cls, email, duration=60):
         try:
+            __import__("ipdb").set_trace()
             Application = get_application_model()
             app = Application.objects.filter().first()
             user = cls.objects.get(username=email)
@@ -414,7 +428,8 @@ class User(AbstractUser, PrintableModel):
                 user=user, app=app, duration=duration, scope="read write tmp_token"
             )
 
-        except Exception:
+        except Exception as e:
+            print(e)
             raise exceptions.CreateTmpTokenError
 
         return access_token
@@ -693,8 +708,8 @@ class EmailAuth(PrintableModel):
 
             mail.is_confirmed = True
             mail.save()
-
         except Exception:
+
             raise exceptions.EmailAuthConfirmError
 
     def __str__(self):
