@@ -420,7 +420,6 @@ class User(AbstractUser, PrintableModel):
     @classmethod
     def tmp_token(cls, email, duration=60):
         try:
-            __import__("ipdb").set_trace()
             Application = get_application_model()
             app = Application.objects.filter().first()
             user = cls.objects.get(username=email)
