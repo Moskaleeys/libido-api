@@ -182,7 +182,8 @@ class Room(PrintableModel):
             room.user_count -= 1
             room.save()
             return room
-        except Exception:
+        except Exception as e:
+            print(e)
             raise exceptions.LeaveRoomFailError
 
     @classmethod
