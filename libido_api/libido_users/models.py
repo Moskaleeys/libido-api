@@ -323,6 +323,13 @@ class User(AbstractUser, PrintableModel):
         primary_key=True,
     )
 
+    agree_marketing = models.BooleanField(
+        default=False,
+        null=True,
+        blank=True,
+        help_text="마케팅 수신동의",
+    )
+
     is_active = models.BooleanField(
         default=True,
         db_index=True,
