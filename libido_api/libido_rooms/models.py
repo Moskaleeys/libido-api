@@ -168,7 +168,7 @@ class Room(PrintableModel):
             room_user = RoomUser.objects.create(user_id=user_id, room_id=room_id)
             room.user_count += 1
             room.save()
-            return room_user
+            return room
         except IntegrityError:
             raise exceptions.JoinRoomError
 
