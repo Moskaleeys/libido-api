@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "oauth2_provider",
     "django_filters",
     "social_django",
+    "django_extensions",
     "rest_framework_social_oauth2",
     "libido_rooms",
     "libido_contents",
