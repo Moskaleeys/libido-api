@@ -75,7 +75,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     # Receive message from web socket
     async def receive(self, text_data):
+        print(text_data)
         data = json.loads(text_data)
+        print(data)
         message = data["message"]
         nickname = data["nickname"]
         username = data.get("username", "empty")
