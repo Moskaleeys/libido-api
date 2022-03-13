@@ -39,7 +39,7 @@ class Message(PrintableModel):
         return f"{self.nickname}"
 
     class Meta:
-        ordering = ["-id", "-created_at"]
+        ordering = ["-id"]
         verbose_name = "채팅 메세지"
         verbose_name_plural = "채팅 메세지 모음"
         db_table = "message"

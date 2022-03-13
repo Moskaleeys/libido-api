@@ -47,7 +47,7 @@ class MessageViewSet(ServiceBaseViewSet):
         TokenHasReadWriteScope,
     ]
     renderer_classes = [renderers.LibidoApiJSONRenderer]
-    queryset = Message.objects.all()
+    queryset = Message.objects.all().order_by("-id")
     serializer_class = MessageSerializer
     pagination_class = CommonCursorPagination
     filter_backends = (
