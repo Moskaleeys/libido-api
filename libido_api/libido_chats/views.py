@@ -58,8 +58,8 @@ class MessageViewSet(ServiceBaseViewSet):
     filter_fields = __basic_fields
     search_fields = __basic_fields
 
-    def get_queryset(self):
+    def get_queryset(self, *args, **kwargs):
         queryset = super().get_queryset()
-        user = self.request.user
-        qs = queryset.filter(nickname=user.nickname).order_by("-id")
+        room_id = self.kwargs["rooms_pk"]
+        qs = queryset.filter(room_id=room_id).order_by("-id")
         return qs
