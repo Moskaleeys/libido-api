@@ -142,6 +142,10 @@ class Room(PrintableModel):
         null=True, blank=True, help_text="현 재생중인 콘텐츠 시간"
     )
 
+    current_play_ts = models.IntegerField(
+        null=True, blank=True, help_text="현 재생중인 콘텐츠 타임스템프"
+    )
+
     current_play_content_id = models.CharField(
         max_length=150, null=True, blank=True, help_text="현 재생중인 콘텐츠 아이디"
     )
