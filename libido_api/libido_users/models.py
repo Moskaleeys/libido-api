@@ -586,11 +586,21 @@ class MyFriend(PrintableModel):
     @classmethod
     def decline(cls, user_id, friend_id):
         try:
+            # 내쪽에서 삭제
             myfriend = cls.objects.filter(
                 user_id=user_id,
                 friend_id=friend_id,
             )
             myfriend.delete()
+
+            # 상대방 쪽에서 삭제
+            cross = cls.objects.filter(
+                user_id=friend_id,
+                friend_id=user_id,
+            )
+
+            cross.delete()
+
             return myfriend
 
         except Exception:
