@@ -556,10 +556,28 @@ class MyFriend(PrintableModel):
     @classmethod
     def approve(cls, request_friend_id, my_id):
         try:
+            # 한쪽으로 추가 해주고, 반대쪽으로도 추가해준다
             myfriend = cls.objects.filter(
                 user_id=request_friend_id,
                 friend_id=my_id,
             ).update(is_approved=True)
+
+            # 나 <-> 상대가 서로 요청을 한 상태의 경우 케이스
+            cross_request, cross_request_is_exists = cls.get_or_create(
+                friend_id=request_friend_id,
+                user_id=my_id,
+            )
+
+            if not cross_request_is_exists:
+                # 있어도 추가
+                cross_request.is_approved
+                cross_request.save()
+                pass
+            else:
+                # 있어도 추가 / 없어도 추가
+                cross_request.is_approved
+                cross_request.save()
+
             return myfriend
 
         except Exception:
