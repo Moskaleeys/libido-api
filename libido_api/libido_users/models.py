@@ -564,19 +564,8 @@ class MyFriend(PrintableModel):
 
             # 나 <-> 상대가 서로 요청을 한 상태의 경우 케이스
             cross_request, cross_request_is_exists = cls.get_or_create(
-                friend_id=request_friend_id,
-                user_id=my_id,
+                user_id=my_id, friend_id=request_friend_id, is_approved=True
             )
-
-            if not cross_request_is_exists:
-                # 있어도 추가
-                cross_request.is_approved = True
-                cross_request.save()
-                pass
-            else:
-                # 있어도 추가 / 없어도 추가
-                cross_request.is_approved = True
-                cross_request.save()
 
             return myfriend
 
