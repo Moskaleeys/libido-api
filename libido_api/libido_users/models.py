@@ -563,10 +563,9 @@ class MyFriend(PrintableModel):
             ).update(is_approved=True)
 
             # 나 <-> 상대가 서로 요청을 한 상태의 경우 케이스
-            cross_request, cross_request_is_exists = cls.get_or_create(
+            cross_request, cross_request_is_exists = cls.objects.get_or_create(
                 user_id=my_id, friend_id=request_friend_id, is_approved=True
             )
-
             return myfriend
 
         except Exception:
