@@ -570,12 +570,12 @@ class MyFriend(PrintableModel):
 
             if not cross_request_is_exists:
                 # 있어도 추가
-                cross_request.is_approved
+                cross_request.is_approved = True
                 cross_request.save()
                 pass
             else:
                 # 있어도 추가 / 없어도 추가
-                cross_request.is_approved
+                cross_request.is_approved = True
                 cross_request.save()
 
             return myfriend
