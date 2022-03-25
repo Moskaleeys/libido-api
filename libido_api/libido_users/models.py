@@ -581,17 +581,18 @@ class MyFriend(PrintableModel):
             )
             myfriend.delete()
 
-            # 상대방 쪽에서 삭제
-            cross = cls.objects.filter(
-                user_id=friend_id,
-                friend_id=user_id,
-            )
+            # # 상대방 쪽에서 삭제
+            # cross = cls.objects.filter(
+            #     user_id=friend_id,
+            #     friend_id=user_id,
+            # )
 
-            cross.delete()
+            # cross.delete()
 
             return myfriend
 
-        except Exception:
+        except Exception as e:
+            print(e)
             return False
 
     @classmethod
@@ -615,6 +616,13 @@ class MyFriend(PrintableModel):
                 friend_id=friend_id,
             )
             myfriend.delete()
+
+            cross = cls.objects.filter(
+                user_id=friend_id,
+                friend_id=user_id,
+            )
+            cross.delete()
+
         except Exception:
             return False
         return True
