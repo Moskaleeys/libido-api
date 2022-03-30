@@ -100,14 +100,14 @@ LOGGING = {
     },
 }
 
-FCM_SERVER_KEY = "AAAs1wDg:APA91bFCeoP0jzvrO4cQp29B4tKP1kSnSaf4zJzoYG4D9znQsj9ihB5LI9HcQHWBUAHek5SN4hDL5WSP4Q0DCXktk27GiNBo2Cy31NgJdjl9enLl9r22TYA7CmoXjI"
+FCM_SERVER_KEY = "AAAs1wDg:APAzvrO4cQp29B4tKP1kSnSaf4zJzoYG4D9znQsj9ihB5LI9HcQHWBUAHek5SN4hDL5WSP4Q0DCXktk27GiNBo2Cy31NgJdjl9enLl9r22TYA7CmoXjI"
 
 # KEYFILES_DIR = os.path.join(BASE_DIR, "credentials")
 # FIREBASE_KEY = "jupiter-2b5d0-firebase-adminsdk-skp17-923cbae407.json"
 
 FCM_DJANGO_SETTINGS = {
     # default: _('FCM Django')
-    "APP_VERBOSE_NAME": "OFFERFLOW-API",
+    "APP_VERBOSE_NAME": "LIBIDO-API",
     # Your firebase API KEY
     "FCM_SERVER_KEY": FCM_SERVER_KEY,
     # true if you want to have only one active device per registered user at a time
