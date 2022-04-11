@@ -180,7 +180,7 @@ class UserViewSet(DeleteMixin, BaseViewSet):
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             properties={
-                "email": openapi.Schema(type=openapi.TYPE_STRING, description="이메일"),
+                "username": openapi.Schema(type=openapi.TYPE_STRING, description="이메일"),
                 "auth_key": openapi.Schema(type=openapi.TYPE_STRING, description="인증키"),
             },
         ),
@@ -196,7 +196,7 @@ class UserViewSet(DeleteMixin, BaseViewSet):
         # 그 다음 임시 토큰을 만들어서 프론트에 주도록 한다.
         # 해당 토큰 유호 시간은 5분으로 정한다.
         # 꼭 어세스 토큰만 발급을 해주고, 리프래시는 주지않는다.
-        email = self.request.data.get("email", None)
+        email = self.request.data.get("username", None)
         auth_key = self.request.data.get("auth_key", None)
 
         if not email:
@@ -217,7 +217,7 @@ class UserViewSet(DeleteMixin, BaseViewSet):
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             properties={
-                "email": openapi.Schema(type=openapi.TYPE_STRING, description="이메일"),
+                "username": openapi.Schema(type=openapi.TYPE_STRING, description="이메일"),
             },
         ),
     )
@@ -228,7 +228,7 @@ class UserViewSet(DeleteMixin, BaseViewSet):
     )
     def send_email_auth(self, request):
         try:
-            email = request.data.get("email")
+            email = request.data.get("username")
             EmailAuth.gen_number(email=email)
             return Response({"results": True}, status=status.HTTP_200_OK)
 
