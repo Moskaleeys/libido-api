@@ -13,7 +13,8 @@ from libido_services.views import (
 
 default_router = DefaultRouter(trailing_slash=False)
 
-default_router.register(r"app_versions", AppVersionViewSet, basename="app_versions")
+default_router.register(
+    r"app_versions", AppVersionViewSet, basename="app_versions")
 default_router.register(
     r"terms_of_services", TermsOfServiceViewSet, basename="terms_of_service"
 )

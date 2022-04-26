@@ -59,7 +59,8 @@ if "DATABASE_HOST" in os.environ:
     DATABASES["default"]["USER"] = os.getenv("DATABASE_USER")
     DATABASES["default"]["PASSWORD"] = os.getenv("DATABASE_PASSWORD")
     DATABASES["default"]["OPTIONS"] = {
-        "charset": "utf8mb4",  # prevent 1366, "Incorrect string value: '\\xEC\\x82\\xAC\\xEC\\x9A\\xA9...' for colum
+        # prevent 1366, "Incorrect string value: '\\xEC\\x82\\xAC\\xEC\\x9A\\xA9...' for colum
+        "charset": "utf8mb4",
         "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
     }
 

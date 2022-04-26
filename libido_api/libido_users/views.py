@@ -424,7 +424,8 @@ class MyFriendViewSet(BaseViewSet):
     def approve(self, request, *args, **kwargs):
         request_friend_id = request.data["friend_id"]
         my_id = request.user.id
-        friend = MyFriend.approve(request_friend_id=request_friend_id, my_id=my_id)
+        friend = MyFriend.approve(
+            request_friend_id=request_friend_id, my_id=my_id)
         serializers = MyFriendSerializer(instance=friend, allow_null=True)
         return Response(serializers.data, status=status.HTTP_200_OK)
 
@@ -498,7 +499,8 @@ class MyFriendViewSet(BaseViewSet):
     def randoms(self, request, *args, **kwargs):
         user_id = request.user.id
         randomic = MyFriend.randoms(user_id=user_id)
-        serializers = UserSerializer(instance=randomic, allow_null=True, many=True)
+        serializers = UserSerializer(
+            instance=randomic, allow_null=True, many=True)
         return Response(serializers.data, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
@@ -551,5 +553,6 @@ class MyFriendViewSet(BaseViewSet):
 
         friend_id = request.data["friend_id"]
         rooms = Room.objects.filter(moderator_id=friend_id)
-        serializers = RoomSerializer(instance=rooms, many=True, allow_null=True)
+        serializers = RoomSerializer(
+            instance=rooms, many=True, allow_null=True)
         return Response(serializers.data, status=status.HTTP_200_OK)
