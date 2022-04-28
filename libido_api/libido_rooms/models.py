@@ -108,8 +108,10 @@ class Room(PrintableModel):
     )
     description = models.TextField(null=True, blank=True, help_text="방 설명")
     is_dm = models.BooleanField(default=False, help_text="DM 여부")
-    is_public = models.BooleanField(db_index=True, default=True, help_text="공개방 여부")
-    password = models.CharField(blank=True, null=True, max_length=250, help_text="비밀번호")
+    is_public = models.BooleanField(
+        db_index=True, default=True, help_text="공개방 여부")
+    password = models.CharField(
+        blank=True, null=True, max_length=250, help_text="비밀번호")
     user_count = models.PositiveIntegerField(
         null=True, blank=True, default=0, help_text="접속한 사람수"
     )
@@ -170,7 +172,8 @@ class Room(PrintableModel):
         try:
             room = cls.get_room(pk=room_id)
             room.check_password(pw=password)
-            room_user = RoomUser.objects.create(user_id=user_id, room_id=room_id)
+            room_user = RoomUser.objects.create(
+                user_id=user_id, room_id=room_id)
             room.user_count += 1
             room.save()
             return room
@@ -258,7 +261,8 @@ class RoomUser(PrintableModel):
         managed = True
 
         constraints = [
-            models.UniqueConstraint(fields=["user", "room"], name="unique_room_user")
+            models.UniqueConstraint(
+                fields=["user", "room"], name="unique_room_user")
         ]
 
 

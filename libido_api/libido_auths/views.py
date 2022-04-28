@@ -29,6 +29,11 @@ from libido_commons.renderers import LibidoApiJSONRenderer
 from libido_users.models import User
 
 
+class index(TokenView):
+    def index(request):
+        return render(request, 'index.html')
+
+
 class CsrfExemptMixin(object):
     """
     Exempts the view from CSRF requirements.
@@ -131,11 +136,14 @@ class CustomSocialConvertTokenView(CsrfExemptMixin, OAuthLibMixin, APIView):
     def post(self, request, *args, **kwargs):
         # Use the rest framework `.data` to fake the post body of the django request.
         mutable_data = request.data.copy()
+        print(mutable_data)
+        return data
         request._request.POST = request._request.POST.copy()
         for key, value in mutable_data.items():
             request._request.POST[key] = value
 
-        url, headers, body, status = self.create_token_response(request._request)
+        url, headers, body, status = self.create_token_response(
+            request._request)
         response = Response(data=json.loads(body), status=status)
 
         for k, v in headers.items():
