@@ -1,4 +1,5 @@
 import bcrypt
+import time
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import BCryptSHA256PasswordHasher, make_password
 from django.db import transaction
@@ -77,4 +78,45 @@ class RegisterRoomSerializer(serializers.Serializer):
             password=password,
         )
         room.contents.add(*contents_query)
+        return room
+
+
+class RegisterDMRoomSerializer(serializers.Serializer):
+    id = serializers.ReadOnlyField()
+    guest_id = serializers.CharField(
+        required=False, help_text="DM 대상 사용자 ID", label="사용자 대상 ID"
+    )
+
+    class Meta:
+        extra_kwargs = {
+            "guest_id": {"write_only": True},
+        }
+
+    def create(self, validated_data):
+        request = self.context.get("request")
+        if isinstance(request.user, AnonymousUser):
+            return exceptions.CreateUserLinkError
+
+        user = request.user
+        guest_id = validated_data.get("guest_id", None)
+        title = f"{user.id}-{guest_id}"
+
+        # contents_query = Content.objects.filter(id__in=content_ids)
+        # play_lists_count = contents_query.count()
+        room, flag = Room.objects.get_or_create(
+            moderator=user,
+            title=title,
+            is_public=False,
+            is_dm=True,
+            password="SECRET",
+        )
+
+        room_user, flag = RoomUser.objects.get_or_create(
+            user_id=guest_id, room_id=room.id
+        )
+        if not flag:
+            room.user_count += 1
+        room.save()
+
+        # room.contents.add(*contents_query)
         return room

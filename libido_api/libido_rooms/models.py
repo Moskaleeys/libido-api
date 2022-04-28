@@ -107,6 +107,7 @@ class Room(PrintableModel):
         db_index=True, max_length=100, null=True, blank=True, help_text="타이틀"
     )
     description = models.TextField(null=True, blank=True, help_text="방 설명")
+    is_dm = models.BooleanField(default=False, help_text="DM 여부")
     is_public = models.BooleanField(db_index=True, default=True, help_text="공개방 여부")
     password = models.CharField(blank=True, null=True, max_length=250, help_text="비밀번호")
     user_count = models.PositiveIntegerField(

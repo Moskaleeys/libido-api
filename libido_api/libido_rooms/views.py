@@ -19,6 +19,7 @@ from libido_rooms.serializers import (
     RoomSerializer,
     RegisterRoomSerializer,
     CategorySerializer,
+    RegisterDMRoomSerializer,
     # RoomCategorySerializer,
 )
 from libido_commons import renderers
@@ -56,7 +57,9 @@ class RoomViewSet(
         permissions.AllowRetriveList,
     ]
     renderer_classes = [renderers.LibidoApiJSONRenderer]
-    queryset = Room.objects.all().exclude(deleted_at__isnull=False).order_by("?")
+    queryset = (
+        Room.objects.filter(is_dm=False).exclude(deleted_at__isnull=False).order_by("?")
+    )
     serializer_class = RoomSerializer
     pagination_class = CommonPagination
     filter_backends = (
@@ -126,7 +129,7 @@ class FriendsRoomViewSet(
 
 
 class UserRoomViewSet(viewsets.ModelViewSet):
-    __basic_fields = ("id", "moderator", "title")
+    __basic_fields = ("id", "moderator", "title", "is_public", "is_dm")
     parent = UserViewSet
     renderer_classes = [renderers.LibidoApiJSONRenderer]
     parent_object = User
@@ -135,7 +138,7 @@ class UserRoomViewSet(viewsets.ModelViewSet):
         TokenHasReadWriteScope,
     ]
 
-    queryset = Room.objects.all()
+    queryset = Room.objects.filter(is_dm=False).order_by("-id")
 
     serializer_class = RoomSerializer
     pagination_class = CommonPagination
@@ -152,6 +155,7 @@ class UserRoomViewSet(viewsets.ModelViewSet):
     serializer_action_classes = {
         "list": RoomSerializer,
         "create": RegisterRoomSerializer,
+        "create_dm": RegisterDMRoomSerializer,
     }
 
     def get_queryset(self):
@@ -172,6 +176,22 @@ class UserRoomViewSet(viewsets.ModelViewSet):
         responses={201: RoomSerializer},
     )
     def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    @swagger_auto_schema(
+        operation_summary="DM 만들기",
+        request_body=RegisterDMRoomSerializer,
+        responses={201: RoomSerializer},
+    )
+    @action(
+        methods=["POST"],
+        detail=False,
+        permission_classes=[TokenHasReadWriteScope],
+    )
+    def create_dm(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
