@@ -2,6 +2,8 @@ import json
 import logging
 import urllib.parse
 
+from .serializers import GoogleSocialAuthSerializer
+from rest_framework.generics import GenericAPIView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
@@ -137,7 +139,7 @@ class CustomSocialConvertTokenView(CsrfExemptMixin, OAuthLibMixin, APIView):
         # Use the rest framework `.data` to fake the post body of the django request.
         mutable_data = request.data.copy()
         print(mutable_data)
-        return data
+        print("MAL")
         request._request.POST = request._request.POST.copy()
         for key, value in mutable_data.items():
             request._request.POST[key] = value
@@ -149,3 +151,15 @@ class CustomSocialConvertTokenView(CsrfExemptMixin, OAuthLibMixin, APIView):
         for k, v in headers.items():
             response[k] = v
         return response
+
+
+# class GoogleSocialAuthView(GenericAPIView):
+
+#     serializer_class = GoogleSocialAuthSerializer
+
+#     def post(self, request):
+#         print(request.data)
+#         serializer = self.serializer_class(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#         data = ((serializer.valideted_data)['auth_token'])
+#         return Response(data, status=status.HTTP_200_OK)

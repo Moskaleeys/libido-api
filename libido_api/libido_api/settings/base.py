@@ -53,18 +53,22 @@ INSTALLED_APPS = [
     "libido_users",
     "libido_auths",
     "libido_services",
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
     # "allauth",
     # "allauth.account",
     # "allauth.socialaccount",
-    # "allauth.socialaccount.providers.google",
-    # "testing"
+    "allauth.socialaccount.providers.google",
+    "testing"
 ]
 
 # ACCOUNT_AUTHENTICATION_METHOD = 'email'
 # ACCOUNT_EMAIL_REQUIRED = True
 # ACCOUNT_UNIQUE_EMAIL = True
 # ACCOUNT_USERNAME_REQUIRED = False
-# SITE_ID = 1
+SITE_ID = 1
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -156,6 +160,8 @@ AUTHENTICATION_BACKENDS = (
     "rest_framework_social_oauth2.backends.DjangoOAuth2",
     # Django
     "django.contrib.auth.backends.ModelBackend",
+    'allauth.account.auth_backends.AuthenticationBackend',
+
 )
 
 DATABASES = {

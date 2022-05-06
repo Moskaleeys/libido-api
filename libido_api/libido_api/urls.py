@@ -51,7 +51,9 @@ urlpatterns = [
     url(r"^v1/", include(chats_urls)),
     path("summernote/", include("django_summernote.urls")),
     url(r"^v9999/auth/", include("rest_framework_social_oauth2.urls")),  # dummpy auth
-    path("test/", include(testing_urls))  # testing purposes
+    path("test/", include(testing_urls)),  # testing purposes
+    path('accounts/', include('allauth.urls')),
+
 ]
 
 

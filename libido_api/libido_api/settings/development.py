@@ -11,7 +11,7 @@ ALLOWED_HOSTS = ["*"]
 
 # WSGI_APPLICATION = "libido_api.wsgi.development.application"
 
-SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
+SECRET_KEY = "django-insecure-pr*ox7h!2j8ql1*@)kt34a8ddalhlvq-bqw73ak@56gieyyj0&"
 
 DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"

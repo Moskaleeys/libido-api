@@ -1,3 +1,4 @@
+from email.policy import HTTP
 from django.contrib.auth import get_user_model
 from django.core.cache import cache
 from drf_yasg import openapi
@@ -93,6 +94,14 @@ class UserViewSet(DeleteMixin, BaseViewSet):
         username = request.data["username"]
         is_duplicate = User.check_username(username=username)
         return Response({"is_duplicate": is_duplicate}, status=status.HTTP_200_OK)
+
+    @action(methods=["PUT"], detail=False, url_path="thumb", permission_classes=[])
+    def update_thumb(self, request, *args, **kwargs):
+        userId = request.user.id
+        target = User.objects.get(id=userId)
+        target.thumb = request.data["thumb"]
+        target.save()
+        return Response(request.user.username, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
         method="post",

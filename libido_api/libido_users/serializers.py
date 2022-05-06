@@ -14,7 +14,8 @@ class UserStatSerializer(serializers.Serializer):
         source="create_room_cnt", allow_null=True
     )
     genre = serializers.ReadOnlyField(source="genre", allow_null=True)
-    friend_cnt = serializers.ReadOnlyField(source="friend_cnt", allow_null=True)
+    friend_cnt = serializers.ReadOnlyField(
+        source="friend_cnt", allow_null=True)
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -78,7 +79,8 @@ class SendInvitationSerializer(serializers.Serializer):
         write_only=True,
     )
 
-    room_id = serializers.CharField(required=True, label="스트리밍 방 pk", write_only=True)
+    room_id = serializers.CharField(
+        required=True, label="스트리밍 방 pk", write_only=True)
 
     def create(self, validated_data):
         receiver_ids = validated_data.get("receiver_ids")
