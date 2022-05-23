@@ -16,5 +16,4 @@ urlpatterns = [
         r"^o/social-convert-token/?$",
         CustomSocialConvertTokenView.as_view(),
         name="convert_token",
-    )
-]
+    )]

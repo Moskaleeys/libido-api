@@ -2,6 +2,7 @@ import json
 import logging
 import urllib.parse
 
+from rest_framework.generics import GenericAPIView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render

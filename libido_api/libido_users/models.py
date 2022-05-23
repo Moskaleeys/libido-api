@@ -633,7 +633,8 @@ class MyFriend(PrintableModel):
         db_table = "friend"
         managed = True
         constraints = [
-            models.UniqueConstraint(fields=["user", "friend"], name="unique_status")
+            models.UniqueConstraint(
+                fields=["user", "friend"], name="unique_status")
         ]
 
 
