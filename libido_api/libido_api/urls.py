@@ -23,7 +23,7 @@ import libido_rooms.urls as rooms_urls
 import libido_users.urls as users_urls
 import libido_contents.urls as contents_urls
 import libido_chats.urls as chats_urls
-import testing.urls as testing_urls
+# import testing.urls as testing_urls
 
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
@@ -51,7 +51,7 @@ urlpatterns = [
     url(r"^v1/", include(chats_urls)),
     path("summernote/", include("django_summernote.urls")),
     url(r"^v9999/auth/", include("rest_framework_social_oauth2.urls")),  # dummpy auth
-    path("test/", include(testing_urls))  # testing purposes
+    # path("test/", include(testing_urls))  # testing purposes
 ]
 
 
