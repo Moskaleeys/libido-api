@@ -21,6 +21,6 @@ class UserAdmin(admin.ModelAdmin):
 
 
 admin.site.register(User, UserAdmin)
-admin.site.site_title = "리비도 어드민 페이지"
-admin.site.site_header = "리비도 어드민"
-admin.site.index_title = "리비도 어드민 입니다."
+admin.site.site_title = "리비도 어드dddd민 페이지"
+admin.site.site_header = "리비도 어dddd드민"
+admin.site.index_title = "리비도 어dddd드민 입니다."
