@@ -37,22 +37,22 @@ $ git clone https://github.com/moskalabs/libido-api.git
 ## Local 환경설정 또는 Docker 둘 중 한 방법 사용하여 설정
 ### Local 환경설정
 1. 원하는 폴더명에 가상환경 설치
-    +Mac
+    + Mac
     ```bash
     $ cd {개별경로}/libido-api/
     $ python3 -m venv {폴더명}
     ```
-    +Windows
+    + Windows
     ```bash
     $ cd {개별경로}/libido-api/
     $ python -m venv {폴더명}
     ```
 2. 생성된 가상환경 실행
-    +Mac
+    + Mac
     ```bash
     $ soucre ./{폴더명}/bin/activate
     ```
-    +Windows
+    + Windows
     ```bash
     $ soucre ./{폴더명}/bin/activate
     ```
