@@ -5,7 +5,14 @@
     + Mac
         + 파이썬3 설치 시 pip3 자동설치
     + Windows
-        + 파이썬3 설치 후 환경변수 설정
+        + 파이썬 설치 후 환경변수 설정
+        + 제어판 -> 시스템 -> 고급 시스템 설정 -> 환경변수 path에 설치 폴더 추가
+        + 설치폴더는 사용자마다 서로 다름 
+          - 기본설치폴더 : C:\Users\{사용자명}\AppData\Local\Programs\Python\Python310\Scripts
+          - 기본설치폴더 : C:\Users\{사용자명}\AppData\Local\Programs\Python\Python310
+        ![image](https://user-images.githubusercontent.com/105629261/172600583-67b039f4-3733-45f7-9b2b-e1a76e295254.png)
+
+
 + 설치 후 python3 및 pip3 버전 확인
 ```bash
 $ python3 --version
