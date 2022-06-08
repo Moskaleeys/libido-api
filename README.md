@@ -1,8 +1,8 @@
 
 ## 설치방법
 ### Install Python
-+ 파이썬 설치 (공식사이트 : https://www.python.org/downloads/)
-+ python 버전 및 pip3 버전 확인
++ Python 및 PIP 설치 (공식사이트 : https://www.python.org/downloads/)
++ 설치 후 python3 및 pip3 버전 확인
 ```bash
 $ python3 --version
 $ pip3 --version
