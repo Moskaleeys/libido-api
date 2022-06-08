@@ -56,14 +56,22 @@ $ git clone https://github.com/moskalabs/libido-api.git
     ```
 3. requirements/requirements.txt 있는 폴더로 이동 후 패키지 설치 => 의존성 패키지는 패키지 추가 될 때마다 추가할 필요가 있음
     ```bash
-    ## Mac, Windows
     $ cd {개별경로}/libido-api/requirements/
+
+    ## Mac
     $ pip3 install -r requirements.txt
+    
+    ## Windows
+    $ pip install -r requirements.txt
     ```
 
     참고) 패키지 추가 후 requirements.txt 재생성
     ```bash
+    ## Mac
     $ pip3 freeze > requirements.txt
+    
+    ## Windows
+    $ pip freeze > requirements.txt
     ```
 4. 서버실행
     + 테스트버전 실행
