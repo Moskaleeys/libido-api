@@ -77,7 +77,12 @@ $ git clone https://github.com/moskalabs/libido-api.git
     + 테스트버전 실행
     ```bash
     $ cd {개별경로}/libido-api/libido_api/
+    
+    ## Mac
     $ python3 manage.py runserver 8888 --settings=libido_api.settings.development
+    
+    ## Windows
+    $ py manage.py runserver 8888 --settings=libido_api.settings.development
     ```   
     <br>
 ### 의존성 패키지 설치 시 오류 날 경우
