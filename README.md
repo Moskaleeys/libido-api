@@ -1,6 +1,6 @@
 
 ## 설치방법
-### Install Python
+### Install Python, Pip
 + Python 및 PIP 설치 (공식사이트 : https://www.python.org/downloads/)
     + Mac
         + Mac은 파이썬3 설치 시 pip3 자동설치됨
@@ -28,15 +28,12 @@
         ![image](https://user-images.githubusercontent.com/105629261/172602687-fff2a3a7-497f-4b97-8155-ca4468ab3400.png)
 
 
-
-
-
-
+<br><br>
 ### Git Clone
 ```bash
 $ git clone https://github.com/moskalabs/libido-api.git
 ```
-
+<br><br>
 ## Local 환경설정 또는 Docker 둘 중 한 방법 사용하여 설정
 ### Local 환경설정
 1. 원하는 폴더명에 가상환경 설치
