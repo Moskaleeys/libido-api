@@ -3,7 +3,13 @@
 ### Install Python
 + Python 및 PIP 설치 (공식사이트 : https://www.python.org/downloads/)
     + Mac
-        + 파이썬3 설치 시 pip3 자동설치
+        + Mac은 파이썬3 설치 시 pip3 자동설치됨
+        + 설치 후 python3 및 pip3 버전 확인
+        ```bash
+        $ python3 --version
+        $ pip3 --version
+        ```
+
     + Windows
         + 파이썬 설치 후 환경변수 설정
         + 제어판 -> 시스템 -> 고급 시스템 설정 -> 환경변수 path에 설치 폴더 추가
@@ -12,13 +18,19 @@
           - C:\파이썬 설치경로\Scripts
 
         ![image](https://user-images.githubusercontent.com/105629261/172600583-67b039f4-3733-45f7-9b2b-e1a76e295254.png)
+        
+        + 환경변수 설정 후 아래와 같이 확인
+        ```bash
+        $ python
+        $ pip --version
+        ```
+
+        ![image](https://user-images.githubusercontent.com/105629261/172602687-fff2a3a7-497f-4b97-8155-ca4468ab3400.png)
 
 
-+ 설치 후 python3 및 pip3 버전 확인
-```bash
-$ python3 --version
-$ pip3 --version
-```
+
+
+
 
 ### Git Clone
 ```bash
