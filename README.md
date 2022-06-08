@@ -2,8 +2,10 @@
 ## 설치방법
 ### Install Python
 + Python 및 PIP 설치 (공식사이트 : https://www.python.org/downloads/)
-    - Mac
-        - 파이썬3 설치 시 pip3 자동설치
+    + Mac
+        + 파이썬3 설치 시 pip3 자동설치
+    + Windows
+        + 파이썬3 설치 후 환경변수 설정
 + 설치 후 python3 및 pip3 버전 확인
 ```bash
 $ python3 --version
