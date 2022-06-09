@@ -91,7 +91,6 @@ $ git clone https://github.com/moskalabs/libido-api.git
     + mysqlclient 설치 오류 시 mac에서 mysql 설치 후 의존성 패키지 재설치
     ```bash
     $ brew install mysql
-    $ mysql.server start
     ```
     + mysql 설치 후 Local 환경설정 -> 의존성패키지 설치부터 다시 실행
 
